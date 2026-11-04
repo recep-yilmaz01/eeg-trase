@@ -145,7 +145,7 @@ td.bad { color: var(--mark); font-weight: 500; }
     <nav class="sitenav" aria-label="Simülatörler"><a href="index.html">EEG</a><a href="emg.html" aria-current="page">EMG ve sinir iletimi</a></nav>
     <div class="eyebrow">Elektronörofizyoloji · Çalışma aracı</div>
     <h1>EMG çekim simülatörü</h1>
-    <p class="lede">İğne EMG'de hastayı ve kasılma gücünü seç, iğneyi oynat, hoparlörü açıp potansiyelleri dinle. Sinir iletiminde median siniri bilekten ve dirsekten uyar, latans, amplitüd ve iletim hızını ölç. Veriler simülasyondur, gerçek hasta kaydı değildir.</p>
+    <p class="lede">İğne EMG'de hastayı ve kasılma gücünü seç, iğneyi oynat, hoparlörü açıp potansiyelleri dinle. Sinir iletiminde median, ulnar, peroneal ve tibial motor sinirleri; median, ulnar ve sural duyusal sinirleri farklı uyarı yerlerinden çalış, latans, amplitüd ve iletim hızını ölç. Veriler simülasyondur, gerçek hasta kaydı değildir.</p>
   </header>
 
   <div class="tabs" role="tablist" aria-label="Çekim türü">
@@ -281,17 +281,26 @@ td.bad { color: var(--mark); font-weight: 500; }
           <span class="label">Hasta</span>
           <div class="seg" id="ncsProfiles" role="group" aria-label="Hasta">
             <button data-c="normal" aria-pressed="true">Normal</button>
-            <button data-c="cts" aria-pressed="false">Karpal tünel</button>
+            <button data-c="cts" aria-pressed="false">Tuzak nöropati</button>
             <button data-c="demyel" aria-pressed="false">Demiyelinizan</button>
             <button data-c="axonal" aria-pressed="false">Aksonal</button>
           </div>
         </div>
         <div class="group">
+          <span class="label">Sinir · kas</span>
+          <select id="nerve" aria-label="Sinir ve kas">
+            <option value="median">Median motor · APB</option>
+            <option value="ulnar">Ulnar motor · ADM</option>
+            <option value="peroneal">Peroneal motor · EDB</option>
+            <option value="tibial">Tibial motor · AH</option>
+            <option value="medSens">Median duyusal · 2. parmak</option>
+            <option value="ulnSens">Ulnar duyusal · 5. parmak</option>
+            <option value="sural">Sural duyusal · lateral malleol</option>
+          </select>
+        </div>
+        <div class="group">
           <span class="label">Uyarı yeri</span>
-          <div class="seg" id="sites" role="group" aria-label="Uyarı yeri">
-            <button data-s="wrist" aria-pressed="true">Bilek</button>
-            <button data-s="elbow" aria-pressed="false">Dirsek</button>
-          </div>
+          <div class="seg" id="sites" role="group" aria-label="Uyarı yeri"></div>
         </div>
         <div class="group" style="flex:1 1 280px">
           <span class="label">Uyarı</span>
@@ -308,7 +317,7 @@ td.bad { color: var(--mark); font-weight: 500; }
           <span class="label">Cihaz</span>
           <div class="settings">
             <label for="sensC">Hassasiyet
-              <select id="sensC"><option value="1">1 mV/div</option><option value="2">2 mV/div</option><option value="5" selected>5 mV/div</option></select>
+              <select id="sensC"><option value="0.005">5 µV/div</option><option value="0.01">10 µV/div</option><option value="0.02">20 µV/div</option><option value="0.05">50 µV/div</option><option value="1">1 mV/div</option><option value="2">2 mV/div</option><option value="5" selected>5 mV/div</option></select>
             </label>
             <label for="sweepC">Süpürme
               <select id="sweepC"><option value="2">2 ms/div</option><option value="3" selected>3 ms/div</option><option value="5">5 ms/div</option></select>
@@ -320,24 +329,24 @@ td.bad { color: var(--mark); font-weight: 500; }
       <div class="ncs-out"><canvas id="cvC" aria-label="Birleşik kas aksiyon potansiyeli kayıtları, bilek ve dirsek"></canvas></div>
       <div class="tbl">
         <table>
-          <thead><tr><th>Median motor (APB)</th><th>Akım</th><th>Latans</th><th>Amplitüd</th><th>Mesafe</th><th>İletim hızı</th></tr></thead>
+          <thead><tr><th id="ncsHead">Median motor (APB)</th><th>Akım</th><th>Latans</th><th>Amplitüd</th><th>Mesafe</th><th>İletim hızı</th></tr></thead>
           <tbody id="ncsTable"></tbody>
         </table>
       </div>
-      <div class="status"><span>Normal sınırlar: distal latans <b>≤ 4,4 ms</b> · amplitüd <b>≥ 4 mV</b> · iletim hızı <b>≥ 49 m/s</b></span><span>Klavye: <b>Boşluk</b> = uyar</span></div>
+      <div class="status"><span id="ncsLimits">Normal sınırlar: distal latans <b>≤ 4,4 ms</b> · amplitüd <b>≥ 4 mV</b> · iletim hızı <b>≥ 49 m/s</b></span><span>Klavye: <b>Boşluk</b> = uyar</span></div>
     </section>
 
     <div class="explain">
       <section style="display:grid;gap:14px">
         <h2>Sinir iletim çalışması nasıl yapılır?</h2>
         <ol class="steps">
-          <li><p><b>Elektrotlar.</b> Kayıt elektrodu başparmak kasının (abduktor pollisis brevis, APB) üstüne, referans elektrodu başparmağa konur. Toprak elektrodu el sırtına.</p></li>
-          <li><p><b>Bilekten uyarı.</b> Median sinir bilekte, kayıt elektrodundan 7 cm uzaktan uyarılır. Akım yavaş yavaş artırılır.</p></li>
+          <li><p><b>Elektrotlar.</b> Motor çalışmada kayıt elektrodu kasın (APB, ADM, EDB, AH) üstüne, referans elektrodu tendon bölgesine konur. Duyusal çalışmada parmak veya bileğe yüzük/şerit elektrot yerleştirilir.</p></li>
+          <li><p><b>Distal uyarı.</b> Sinir, kayıt elektrodundan standart uzaklıkta uyarılır. Akım yavaş yavaş artırılır.</p></li>
           <li><p><b>Supramaksimal uyarı.</b> Amplitüd artmayı bırakınca bütün aksonlar uyarılmış demektir. Akım %20 daha artırılır. Submaksimal uyarıyla ölçülen amplitüd yanlış düşük çıkar.</p></li>
-          <li><p><b>Dirsekten uyarı.</b> Aynı sinir dirsekte uyarılır. İki nokta arasındaki mesafe mezura ile ölçülür.</p></li>
-          <li><p><b>Hesap.</b> Kasta oluşan yanıta birleşik kas aksiyon potansiyeli (BKAP, İngilizcesi CMAP) denir. Başlangıcına kadar geçen süre latans, tepe yüksekliği amplitüddür.</p></li>
+          <li><p><b>Proksimal uyarı.</b> Aynı sinir daha proksimalden (dirsek, aksilla, Erb noktası, fibula başı, popliteal fossa) uyarılır. İki uyarı yeri arasındaki mesafe mezura ile ölçülür.</p></li>
+          <li><p><b>Hesap.</b> Motor yanıta birleşik kas aksiyon potansiyeli (BKAP/CMAP), duyusal yanıta duyusal sinir aksiyon potansiyeli (DSAP/SNAP) denir. Başlangıca kadar geçen süre latans, tepe yüksekliği amplitüddür.</p></li>
         </ol>
-        <div class="formula">İletim hızı (m/s) = mesafe (mm) ÷ (dirsek latansı − bilek latansı) (ms)</div>
+        <div class="formula">İletim hızı (m/s) = iki uyarı yeri arası mesafe (mm) ÷ (proksimal latans − distal latans) (ms)</div>
       </section>
 
       <section style="display:grid;gap:12px">
@@ -346,13 +355,15 @@ td.bad { color: var(--mark); font-weight: 500; }
           <table>
             <thead><tr><th>Tablo</th><th>Distal latans</th><th>Amplitüd</th><th>İletim hızı</th><th>Neden</th></tr></thead>
             <tbody>
-              <tr><td>Karpal tünel sendromu</td><td>Uzun</td><td>Normal veya hafif düşük</td><td>Önkolda normal</td><td>Sinir sadece bilekte, tünelde sıkışır</td></tr>
+              <tr><td>Karpal tünel sendromu</td><td>Uzun</td><td>Normal veya hafif düşük</td><td>Önkolda normal</td><td>Median sinir bilekte, karpal tünelde sıkışır</td></tr>
+              <tr><td>Kubital tünel sendromu</td><td>Normal</td><td>Hafif düşük</td><td>Dirsek çevresinde yavaş</td><td>Ulnar sinir dirsekte sıkışır; dirsek altı-üstü segmenti yavaşlar</td></tr>
+              <tr><td>Fibula başı tuzak nöropatisi</td><td>Normal</td><td>Hafif düşük</td><td>Fibula başı çevresinde yavaş</td><td>Peroneal sinir fibula başında sıkışır</td></tr>
               <tr><td>Demiyelinizan nöropati</td><td>Uzun</td><td>Dirsekte düşer, yanıt yayvanlaşır</td><td>Çok yavaş</td><td>Miyelin hasarı iletimi yavaşlatır ve dağıtır (temporal dispersiyon)</td></tr>
               <tr><td>Aksonal nöropati</td><td>Normale yakın</td><td>Düşük</td><td>Normale yakın</td><td>Akson sayısı azalır; kalanlar normal hızda iletir</td></tr>
             </tbody>
           </table>
         </div>
-        <p class="note">Gerçek çalışmada duyusal iletim ve F dalgası da bakılır; bu simülatörde yalnızca motor iletim var.</p>
+        <p class="note">Tuzak nöropati seçildiğinde sinirin tipik sıkışma yerinde odak yavaşlama uygulanır: median bilekte (karpal tünel), ulnar dirsekte (kubital tünel), peroneal fibula başında. Gerçek çalışmada ayrıca F dalgası ve H refleksi de bakılır.</p>
       </section>
     </div>
   </div>
@@ -775,26 +786,127 @@ td.bad { color: var(--mark); font-weight: 500; }
   // NERVE CONDUCTION (median motor, recording APB)
   // =====================================================================
   const NFS = 20000, NWIN = 50; // Hz, ms
-  const DIST_WRIST = 70, DIST_ELBOW = 230; // mm
-  const COND = {
-    normal: { label: 'Normal', dl: 3.4, amp: 9.0, cv: 57, ampE: 8.6, disp: 1.0, dispE: 1.0, i50: 9 },
-    cts: { label: 'Karpal tünel', dl: 5.8, amp: 7.0, cv: 54, ampE: 6.7, disp: 1.1, dispE: 1.1, i50: 10 },
-    demyel: { label: 'Demiyelinizan', dl: 6.4, amp: 5.5, cv: 31, ampE: 3.3, disp: 1.3, dispE: 1.8, i50: 14 },
-    axonal: { label: 'Aksonal', dl: 3.8, amp: 2.1, cv: 49, ampE: 2.0, disp: 1.0, dispE: 1.05, i50: 9 },
+  const NERVES = {
+    median: {
+      label: 'Median motor', muscle: 'APB', kind: 'motor',
+      base: { dl: 3.4, cv: 57, amp: 9.0, disp: 1.0, i50: 9 },
+      sites: [
+        { key: 'wrist', label: 'Bilek', dist: 70 },
+        { key: 'elbow', label: 'Dirsek', dist: 300 },
+        { key: 'axilla', label: 'Aksilla', dist: 520 },
+        { key: 'erb', label: 'Erb noktası', dist: 700 },
+      ],
+      entrap: { focal: 2.4, dist: 70, amp: 0.82, label: 'Karpal tünel' },
+      limits: { dl: 4.4, amp: 4.0, cv: 49 },
+    },
+    ulnar: {
+      label: 'Ulnar motor', muscle: 'ADM', kind: 'motor',
+      base: { dl: 2.6, cv: 60, amp: 8.0, disp: 1.0, i50: 8 },
+      sites: [
+        { key: 'wrist', label: 'Bilek', dist: 70 },
+        { key: 'below', label: 'Dirsek altı', dist: 270 },
+        { key: 'above', label: 'Dirsek üstü', dist: 330 },
+        { key: 'axilla', label: 'Aksilla', dist: 530 },
+      ],
+      entrap: { focal: 1.8, dist: 330, amp: 0.85, label: 'Kubital tünel' },
+      limits: { dl: 3.3, amp: 6.0, cv: 49 },
+    },
+    peroneal: {
+      label: 'Peroneal motor', muscle: 'EDB', kind: 'motor',
+      base: { dl: 3.6, cv: 50, amp: 4.5, disp: 1.0, i50: 9 },
+      sites: [
+        { key: 'ankle', label: 'Ayak bileği', dist: 80 },
+        { key: 'below', label: 'Fibula başı altı', dist: 380 },
+        { key: 'above', label: 'Fibula başı üstü', dist: 440 },
+      ],
+      entrap: { focal: 1.6, dist: 440, amp: 0.85, label: 'Fibula başı' },
+      limits: { dl: 5.5, amp: 2.0, cv: 40 },
+    },
+    tibial: {
+      label: 'Tibial motor', muscle: 'AH', kind: 'motor',
+      base: { dl: 3.4, cv: 48, amp: 8.0, disp: 1.0, i50: 8 },
+      sites: [
+        { key: 'ankle', label: 'Ayak bileği', dist: 90 },
+        { key: 'popliteal', label: 'Popliteal fossa', dist: 540 },
+      ],
+      entrap: { focal: 1.2, dist: 540, amp: 0.9, label: 'Popliteal tuzak' },
+      limits: { dl: 5.8, amp: 4.0, cv: 40 },
+    },
+    medSens: {
+      label: 'Median duyusal', muscle: '2. parmak', kind: 'sensory',
+      base: { dl: 1.7, cv: 55, amp: 0.035, disp: 0.8, i50: 6 },
+      sites: [
+        { key: 'palm', label: 'Avuç içi', dist: 80 },
+        { key: 'wrist', label: 'Bilek', dist: 150 },
+      ],
+      entrap: { focal: 1.2, dist: 150, amp: 0.8, label: 'Karpal tünel' },
+      limits: { dl: 3.5, amp: 0.015, cv: 45 },
+    },
+    ulnSens: {
+      label: 'Ulnar duyusal', muscle: '5. parmak', kind: 'sensory',
+      base: { dl: 1.6, cv: 55, amp: 0.030, disp: 0.8, i50: 6 },
+      sites: [
+        { key: 'palm', label: 'Avuç içi', dist: 70 },
+        { key: 'wrist', label: 'Bilek', dist: 120 },
+      ],
+      entrap: { focal: 1.0, dist: 120, amp: 0.8, label: 'Guyon tüneli' },
+      limits: { dl: 3.1, amp: 0.010, cv: 45 },
+    },
+    sural: {
+      label: 'Sural duyusal', muscle: 'lateral malleol', kind: 'sensory',
+      base: { dl: 2.4, cv: 48, amp: 0.012, disp: 0.9, i50: 6 },
+      sites: [
+        { key: 'distal', label: 'Baldır distal', dist: 90 },
+        { key: 'proximal', label: 'Baldır proksimal', dist: 180 },
+      ],
+      entrap: null,
+      limits: { dl: 4.0, amp: 0.006, cv: 40 },
+    },
   };
-  const C = { cond: 'normal', site: 'wrist', cur: 10, sens: 5, sweep: 3, traces: { wrist: [], elbow: [] } };
+  const COND = {
+    normal: { label: 'Normal' },
+    cts: { label: 'Tuzak nöropati' },
+    demyel: { label: 'Demiyelinizan', dl: 1.8, cv: 0.55, amp: 0.62, disp: 1.5, i50: 4 },
+    axonal: { label: 'Aksonal', dl: 1.1, cv: 0.86, amp: 0.24, disp: 1.05, i50: 1 },
+  };
+  const C = { cond: 'normal', nerve: 'median', site: 'wrist', cur: 10, sens: 5, sweep: 3, traces: {} };
 
-  function recordCmap(site, I) {
-    const P = COND[C.cond];
-    const elbow = site === 'elbow';
-    const lat = elbow ? P.dl + DIST_ELBOW / P.cv : P.dl;
-    const i50 = P.i50 + (elbow ? 4 : 0);
+  function profileFor(N, cond) {
+    const B = N.base;
+    const p = { dl: B.dl, cv: B.cv, amp: B.amp, disp: B.disp, i50: B.i50, focal: 0, focalDist: Infinity };
+    if (cond === 'cts') {
+      if (N.entrap) { p.focal = N.entrap.focal; p.focalDist = N.entrap.dist; p.amp *= N.entrap.amp; p.disp *= 1.1; }
+      return p;
+    }
+    const c = COND[cond];
+    p.dl *= c.dl || 1; p.cv *= c.cv || 1; p.amp *= c.amp || 1; p.disp *= c.disp || 1; p.i50 += c.i50 || 0;
+    return p;
+  }
+  function siteLatency(N, site, p) {
+    let lat = p.dl + (site.dist - N.sites[0].dist) / p.cv;
+    if (p.focal && site.dist >= p.focalDist) lat += p.focal;
+    return lat;
+  }
+  function ampText(a, kind) {
+    return kind === 'sensory' ? `${fmt(a * 1000, 0)} µV` : `${fmt(a, 1)} mV`;
+  }
+
+  function recordCmap(nerveKey, siteKey, I) {
+    const N = NERVES[nerveKey], P = profileFor(N, C.cond);
+    const site = N.sites.find(s => s.key === siteKey);
+    const first = N.sites[0], last = N.sites[N.sites.length - 1];
+    const span = Math.max(1, last.dist - first.dist);
+    const rel = (site.dist - first.dist) / span;
+    const lat = siteLatency(N, site, P);
+    const i50 = P.i50 + rel * (N.kind === 'sensory' ? 1 : 4);
     let frac = 1 / (1 + Math.exp(-(I - i50) / 1.8));
     if (I < i50 - 7) frac = 0;
-    const A = (elbow ? P.ampE : P.amp) * frac;
-    const d1 = 5.5 * (elbow ? P.dispE : P.disp), d2 = 7 * (elbow ? P.dispE : P.disp);
+    const A = P.amp * (1 - 0.12 * rel) * frac;
+    const d1 = (N.kind === 'sensory' ? 1.5 : 5.5) * P.disp * (1 + 0.1 * rel);
+    const d2 = (N.kind === 'sensory' ? 2.0 : 7.0) * P.disp * (1 + 0.1 * rel);
     const n = Math.round(NWIN * NFS / 1000), data = new Float32Array(n);
-    const art = I / 50;
+    const art = (I / 50) * (N.kind === 'sensory' ? 0.18 : 1);
+    const noise = N.kind === 'sensory' ? 0.0015 : 0.01;
     for (let i = 0; i < n; i++) {
       const t = i * 1000 / NFS;
       let v = 0;
@@ -803,20 +915,21 @@ td.bad { color: var(--mark); font-weight: 500; }
       const tau = t - lat;
       if (A > 0 && tau > -2) {
         v += -A * gauss(tau, 0.45 * d1, 0.17 * d1);
-        v += 0.45 * A * gauss(tau, d1 + 0.35 * d2, 0.22 * d2);
+        v += (N.kind === 'sensory' ? 0.6 : 0.45) * A * gauss(tau, d1 + 0.35 * d2, 0.22 * d2);
       }
-      v += randn() * 0.01;
+      v += randn() * noise;
       data[i] = v;
     }
-    return { data, I, frac, ...measureCmap(data) };
+    const startMs = clamp(lat * 0.55, N.kind === 'sensory' ? 0.8 : 1.5, 12);
+    return { data, I, frac, site: siteKey, ...measureCmap(data, N.kind === 'sensory' ? 0.004 : 0.15, startMs, N.kind === 'sensory' ? 0.08 : 0.03) };
   }
-  function measureCmap(data) {
-    const s0 = Math.round(1.5 * NFS / 1000);
+  function measureCmap(data, minAmp, startMs, thrFrac) {
+    const s0 = Math.round(startMs * NFS / 1000);
     let mn = 0, mi = -1;
     for (let i = s0; i < data.length; i++) if (data[i] < mn) { mn = data[i]; mi = i; }
     const amp = -mn;
-    if (amp < 0.15) return { amp: 0, lat: null, peakI: -1 };
-    const thr = -0.03 * amp;
+    if (amp < minAmp) return { amp: 0, lat: null, peakI: -1 };
+    const thr = -thrFrac * amp;
     let on = -1;
     for (let i = s0; i < mi; i++) if (data[i] < thr && data[i + 1] < thr && data[i + 2] < thr) { on = i; break; }
     return { amp, lat: on >= 0 ? on * 1000 / NFS : null, peakI: mi, onI: on };
@@ -827,33 +940,36 @@ td.bad { color: var(--mark); font-weight: 500; }
   function sizeNcs() {
     if ($('pNcs').hidden) return;
     const narrow = cvC.parentElement.getBoundingClientRect().width < 520;
-    dC = fitCanvas(cvC, narrow ? 340 : 400);
+    const rows = NERVES[C.nerve].sites.length;
+    const h = (narrow ? 320 : 400) + Math.max(0, rows - 2) * (narrow ? 74 : 88);
+    dC = fitCanvas(cvC, h);
     drawNcs();
   }
   function drawNcs() {
     if (!dC || $('pNcs').hidden) return;
     const { ctx, w, h } = dC, c = colors();
+    const N = NERVES[C.nerve];
     ctx.fillStyle = c.surface; ctx.fillRect(0, 0, w, h);
-    const labelW = w < 520 ? 0 : 92;
+    const labelW = w < 520 ? 0 : 132;
     const x0 = 12 + labelW, pw = w - x0 - 12;
-    const rows = [['wrist', 'Bilek'], ['elbow', 'Dirsek']];
-    const rowH = (h - 34) / 2;
+    const rows = N.sites;
+    const rowH = (h - 34) / rows.length;
     const win = C.sweep * 10, n = Math.round(win * NFS / 1000);
-    rows.forEach(([key, name], r) => {
+    rows.forEach((site, r) => {
       const y0 = 8 + r * rowH, hh = rowH - 10;
       grid(ctx, x0, y0, pw, hh, 10, 4);
       const base = y0 + hh * 0.7; // CMAP is mostly negative (drawn up), so the baseline sits low
       const kV = (hh / 4) / C.sens;
       ctx.fillStyle = c.ink; ctx.font = `600 13px ${c['font-mono']}`; ctx.textBaseline = 'alphabetic';
-      if (labelW) ctx.fillText(name, 12, y0 + 18); else ctx.fillText(name, x0 + 6, y0 + 16);
-      const list = C.traces[key];
+      if (labelW) ctx.fillText(site.label, 12, y0 + 18); else ctx.fillText(site.label, x0 + 6, y0 + 16);
+      const list = C.traces[site.key] || [];
       if (labelW && list.length) { ctx.fillStyle = c.muted; ctx.font = `400 11px ${c['font-mono']}`; ctx.fillText(`${list[list.length - 1].I} mA`, 12, y0 + 36); }
       list.forEach((tr, i) => {
         const latest = i === list.length - 1;
         ctx.strokeStyle = latest ? c.trace : c.faint; ctx.lineWidth = latest ? 1.6 : 1;
         ctx.beginPath();
         for (let k = 0; k < n; k++) {
-          const x = x0 + k / n * pw, y = base + clamp(tr.data[k] * kV,-base + y0 - 2, y0 + hh - base + 2);
+          const x = x0 + k / n * pw, y = base + clamp(tr.data[k] * kV, -base + y0 - 2, y0 + hh - base + 2);
           k ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
         }
         ctx.stroke();
@@ -866,38 +982,45 @@ td.bad { color: var(--mark); font-weight: 500; }
           if (tr.peakI < n) {
             const px = x0 + tr.peakI / n * pw, py = base + clamp(tr.data[tr.peakI] * kV, -base + y0 - 2, 0);
             ctx.beginPath(); ctx.arc(px, py, 3.5, 0, Math.PI * 2); ctx.fill();
-            ctx.fillText(`${fmt(tr.amp, 1)} mV`, Math.min(px + 7, x0 + pw - 60), Math.max(py + 4, y0 + 12));
+            ctx.fillText(ampText(tr.amp, N.kind), Math.min(px + 7, x0 + pw - 60), Math.max(py + 4, y0 + 12));
           }
         }
       });
       if (!list.length) {
         ctx.fillStyle = c.muted; ctx.font = `400 12px ${c['font-mono']}`;
-        ctx.fillText(key === 'wrist' ? 'Bilekten uyar' : 'Dirsekten uyar', x0 + pw / 2 - 45, base + hh * 0.3);
+        ctx.fillText(`${site.label} bölgesinden uyar`, x0 + pw / 2 - 60, base + hh * 0.3);
       }
     });
     ctx.fillStyle = c.muted; ctx.font = `400 11px ${c['font-mono']}`;
-    ctx.fillText(`${C.sweep} ms/div · ${C.sens} mV/div`, x0, h - 10);
+    const sensTxt = C.sens >= 1 ? `${C.sens} mV/div` : `${Math.round(C.sens * 1000)} µV/div`;
+    ctx.fillText(`${C.sweep} ms/div · ${sensTxt}`, x0, h - 10);
   }
 
   function ncsTable() {
-    const P = COND[C.cond];
-    const W = C.traces.wrist.at(-1), E = C.traces.elbow.at(-1);
+    const N = NERVES[C.nerve], L = N.limits;
     const cell = (v, bad) => `<td class="num${bad ? ' bad' : ''}">${v}</td>`;
-    let rows = '';
-    if (W) {
-      rows += `<tr><td>Bilek</td>${cell(W.I + ' mA')}${cell(W.lat !== null ? fmt(W.lat, 1) + ' ms' : 'yanıt yok', W.lat !== null && W.lat > 4.4)}${cell(fmt(W.amp, 1) + ' mV', W.amp < 4)}${cell(DIST_WRIST + ' mm')}${cell('')}</tr>`;
-    } else rows += `<tr><td>Bilek</td>${cell('–')}${cell('–')}${cell('–')}${cell(DIST_WRIST + ' mm')}${cell('')}</tr>`;
-    let cv = '–', cvBad = false;
-    if (W && E && W.lat !== null && E.lat !== null && E.lat > W.lat) {
-      const v = DIST_ELBOW / (E.lat - W.lat); cv = fmt(v, 0) + ' m/s'; cvBad = v < 49;
-    }
-    if (E) {
-      rows += `<tr><td>Dirsek</td>${cell(E.I + ' mA')}${cell(E.lat !== null ? fmt(E.lat, 1) + ' ms' : 'yanıt yok')}${cell(fmt(E.amp, 1) + ' mV', E.amp < 4)}${cell(DIST_ELBOW + ' mm')}${cell(cv, cvBad)}</tr>`;
-    } else rows += `<tr><td>Dirsek</td>${cell('–')}${cell('–')}${cell('–')}${cell(DIST_ELBOW + ' mm')}${cell(cv)}</tr>`;
+    $('ncsHead').textContent = `${N.label} (${N.muscle})`;
+    let rows = '', prev = null;
+    N.sites.forEach((site, i) => {
+      const tr = (C.traces[site.key] || []).at(-1);
+      let cv = '–', cvBad = false;
+      if (tr && prev && prev.tr && tr.lat !== null && prev.tr.lat !== null && tr.lat > prev.tr.lat) {
+        const v = (site.dist - prev.site.dist) / (tr.lat - prev.tr.lat);
+        cv = fmt(v, 0) + ' m/s'; cvBad = v < L.cv;
+      }
+      const dist = i === 0 ? site.dist : site.dist - prev.site.dist;
+      const latBad = i === 0 && tr && tr.lat !== null && tr.lat > L.dl;
+      if (tr) {
+        rows += `<tr><td>${site.label}</td>${cell(tr.I + ' mA')}${cell(tr.lat !== null ? fmt(tr.lat, 1) + ' ms' : 'yanıt yok', latBad)}${cell(ampText(tr.amp, N.kind), tr.amp < L.amp)}${cell(dist + ' mm')}${cell(cv, cvBad)}</tr>`;
+      } else {
+        rows += `<tr><td>${site.label}</td>${cell('–')}${cell('–')}${cell('–')}${cell(dist + ' mm')}${cell(cv, cvBad)}</tr>`;
+      }
+      prev = { site, tr };
+    });
     $('ncsTable').innerHTML = rows;
   }
   function stimulate() {
-    const tr = recordCmap(C.site, C.cur);
+    const tr = recordCmap(C.nerve, C.site, C.cur);
     const list = C.traces[C.site];
     // keep the previous few stimuli faintly, like the stacked traces on a real machine
     list.push(tr); if (list.length > 4) list.shift();
@@ -908,22 +1031,55 @@ td.bad { color: var(--mark); font-weight: 500; }
     drawNcs(); ncsTable();
   }
 
+  function resetTraces() {
+    const N = NERVES[C.nerve];
+    C.traces = {};
+    N.sites.forEach(s => { C.traces[s.key] = []; });
+    $('supra').textContent = 'Henüz uyarı yok'; $('supra').className = 'chip warn';
+  }
+  function buildSiteButtons() {
+    const N = NERVES[C.nerve];
+    $('sites').innerHTML = N.sites.map(s => `<button data-s="${s.key}" aria-pressed="${String(s.key === C.site)}">${s.label}</button>`).join('');
+  }
+  function updateLimits() {
+    const N = NERVES[C.nerve], L = N.limits;
+    const amp = N.kind === 'sensory' ? `${Math.round(L.amp * 1000)} µV` : `${fmt(L.amp, 1)} mV`;
+    $('ncsLimits').innerHTML = `Normal sınırlar: distal latans <b>≤ ${fmt(L.dl, 1)} ms</b> · amplitüd <b>≥ ${amp}</b> · iletim hızı <b>≥ ${L.cv} m/s</b>`;
+    cvC.setAttribute('aria-label', `${N.label} (${N.muscle}) birleşik aksiyon potansiyeli kayıtları`);
+  }
+  function setNerve(key) {
+    const N = NERVES[key];
+    C.nerve = key;
+    C.site = N.sites[0].key;
+    C.sens = N.kind === 'sensory' ? 0.02 : 5;
+    C.sweep = N.kind === 'sensory' ? 2 : (N.sites.length >= 4 ? 5 : 3);
+    $('sensC').value = String(C.sens);
+    $('sweepC').value = String(C.sweep);
+    resetTraces();
+    buildSiteButtons();
+    updateLimits();
+    ncsTable();
+    sizeNcs();
+  }
+
   document.querySelectorAll('#ncsProfiles button').forEach(b => b.addEventListener('click', () => {
     C.cond = b.dataset.c;
     document.querySelectorAll('#ncsProfiles button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
-    C.traces = { wrist: [], elbow: [] };
-    $('supra').textContent = 'Henüz uyarı yok'; $('supra').className = 'chip warn';
+    resetTraces();
     drawNcs(); ncsTable();
   }));
-  document.querySelectorAll('#sites button').forEach(b => b.addEventListener('click', () => {
+  $('sites').addEventListener('click', e => {
+    const b = e.target.closest('button[data-s]');
+    if (!b) return;
     C.site = b.dataset.s;
-    document.querySelectorAll('#sites button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
-  }));
+    $('sites').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  });
+  $('nerve').addEventListener('change', e => setNerve(e.target.value));
   $('cur').addEventListener('input', e => { C.cur = +e.target.value; $('curOut').textContent = C.cur + ' mA'; });
   $('bStim').addEventListener('click', stimulate);
   $('sensC').addEventListener('change', e => { C.sens = +e.target.value; drawNcs(); });
   $('sweepC').addEventListener('change', e => { C.sweep = +e.target.value; drawNcs(); });
-  $('bClear').addEventListener('click', () => { C.traces = { wrist: [], elbow: [] }; drawNcs(); ncsTable(); });
+  $('bClear').addEventListener('click', () => { resetTraces(); drawNcs(); ncsTable(); });
   document.addEventListener('keydown', e => {
     if (e.code === 'Space' && !$('pNcs').hidden && !['INPUT', 'SELECT', 'BUTTON'].includes(document.activeElement.tagName)) { e.preventDefault(); stimulate(); }
   });
@@ -945,7 +1101,7 @@ td.bad { color: var(--mark); font-weight: 500; }
   new ResizeObserver(() => { sizeNeedle(); sizeNcs(); }).observe(document.querySelector('.wrap'));
   buildProfile();
   generate(FS); // one second of history so the screen opens full
-  ncsTable();
+  setNerve('median');
   showTab(location.hash === '#iletim' ? 'ncs' : 'needle');
   statusNeedle();
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) { N.paused = true; $('bPauseN').textContent = 'Devam et'; $('bPauseN').setAttribute('aria-pressed', 'true'); }
