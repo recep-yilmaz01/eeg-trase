@@ -195,9 +195,22 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
 .feedback { border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 7px; padding: 10px 12px; font-size: 13px; color: var(--muted); }
 .feedback.good { border-left-color: #2f7d57; }
 .feedback.bad { border-left-color: var(--right); }
+#kafa3d { display: grid; gap: 14px; }
+.head3d-wrap { display: grid; grid-template-columns: minmax(0, 1fr) 310px; gap: 16px; align-items: stretch; }
+.head3d-stage { position: relative; min-height: 480px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: radial-gradient(circle at 42% 34%, var(--surface), var(--paper) 72%); }
+.head3d-stage canvas { display: block; width: 100%; height: 100%; touch-action: none; cursor: grab; }
+.head3d-stage canvas:active { cursor: grabbing; }
+.head3d-fallback { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 24px; font-size: 13px; color: var(--muted); background: var(--surface); }
+.head3d-side { display: grid; gap: 12px; align-content: start; }
+.head3d-info { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 7px; font-size: 13px; color: var(--muted); min-height: 132px; align-content: start; }
+.head3d-info b { color: var(--ink); font-size: 15px; }
+.head3d-info dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; margin: 0; }
+.head3d-info dt { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
+.head3d-info dd { margin: 0; color: var(--ink); font-size: 13px; overflow-wrap: anywhere; }
+@media (max-width: 860px) { .head3d-wrap { grid-template-columns: minmax(0, 1fr); } .head3d-stage { min-height: 360px; } }
 .template { overflow-x: auto; }
 @media print {
-  .sitenav, .instrument, #hastalar, #senaryolar, .tools, .exam-interactive, header .lede, .eyebrow { display: none !important; }
+  .sitenav, .instrument, #hastalar, #senaryolar, #kafa3d, .tools, .exam-interactive, header .lede, .eyebrow { display: none !important; }
   body { background: #fff; color: #000; }
   .wrap { max-width: none; padding: 0; }
   .card, .tbl { border-color: #999; }
@@ -209,7 +222,7 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
 
 <div class="wrap">
   <header>
-    <nav class="sitenav" aria-label="Simülatörler"><a href="index.html" aria-current="page">EEG</a><a href="emg.html">EMG ve sinir iletimi</a><a href="#senaryolar">Klinik senaryolar</a><a href="#hastalar">Epilepsi örnekleri</a><a href="#sinav">Öğrenci sınavı</a></nav>
+    <nav class="sitenav" aria-label="Simülatörler"><a href="index.html" aria-current="page">EEG</a><a href="emg.html">EMG ve sinir iletimi</a><a href="#kafa3d">3B kafa</a><a href="#senaryolar">Klinik senaryolar</a><a href="#hastalar">Epilepsi örnekleri</a><a href="#sinav">Öğrenci sınavı</a></nav>
     <div class="eyebrow">Elektronörofizyoloji · Çalışma aracı</div>
     <h1>EEG trase simülatörü</h1>
     <p class="lede">Ekrandaki çizgiler 10-20 sistemine göre yerleştirilmiş 19 elektrottan, bipolar boyuna montajla ("double banana") üretiliyor. Durumu değiştir, artefakt ekle, filtrelerle oyna; trasenin nasıl değiştiğini gerçek bir cihazdaki gibi izle. Veriler simülasyondur, gerçek hasta kaydı değildir.</p>
@@ -306,6 +319,39 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
     </div>
     <div class="screen" id="screen"><canvas id="cv" aria-label="Kayan EEG trasesi, 18 kanal"></canvas></div>
     <div class="status" id="status"></div>
+  </section>
+
+  <section id="kafa3d" style="display:grid;gap:14px">
+    <div>
+      <h2>3B 10-20 yerleşimi</h2>
+      <p class="note">Kafayı sürükleyerek döndürün, elektrota tıklayarak bilgi alın. Montaj zincirleri, empedans renkleri ve epileptiform odak vurgusu canlı olarak eşlenir. Sol/sağ taraflar mavi-kırmızı, orta hat yeşil; empedans ölçümünde renkler yeşil–sarı–kırmızıya döner.</p>
+    </div>
+    <div class="head3d-wrap">
+      <div class="head3d-stage" id="head3dStage">
+        <canvas id="head3dCv" tabindex="0" aria-label="10-20 elektrotlarının üç boyutlu kafa modeli üzerinde yerleşimi. Döndürmek için sürükleyin; elektrot seçmek için tıklayın."></canvas>
+        <div class="head3d-fallback" id="head3dFallback">3B görünüm yükleniyor…</div>
+      </div>
+      <aside class="head3d-side">
+        <div class="toolbar" role="group" aria-label="3B görünüm kontrolleri">
+          <button type="button" data-view="front">Ön</button>
+          <button type="button" data-view="left">Sol</button>
+          <button type="button" data-view="right">Sağ</button>
+          <button type="button" data-view="top">Üst</button>
+          <button type="button" data-view="back">Arka</button>
+          <button type="button" id="b3dSpin" aria-pressed="true">Döndür</button>
+          <button type="button" id="b3dLabels" aria-pressed="true">Etiketler</button>
+          <button type="button" id="b3dChains" aria-pressed="true">Montaj</button>
+          <button type="button" id="b3dXray" aria-pressed="false">Şeffaf</button>
+          <button type="button" id="b3dZoomIn" aria-label="Yakınlaştır">+</button>
+          <button type="button" id="b3dZoomOut" aria-label="Uzaklaştır">−</button>
+        </div>
+        <div class="head3d-info" id="head3dInfo" aria-live="polite">
+          <b>Elektrot seçilmedi</b>
+          <span>Elektrota tıklayarak ad, bölge, empedans ve ilgili kanalları görün.</span>
+        </div>
+        <p class="note">Ok tuşlarıyla da döndürebilirsiniz. Şeffaf mod arka yarımküreyi gösterir; ön/arka ayrımı için etiketleri kullanın. Elektrot konumları eğitim amaçlı yaklaşıktır.</p>
+      </aside>
+    </div>
   </section>
 
   <section class="tools" aria-label="Kalite kontrol ve olay işaretleyicileri">
@@ -464,6 +510,7 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
 <script>
 (() => {
   const FS = 256;
@@ -1027,6 +1074,7 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
       const wasType = sez.type;
       sez.on = false;
       mark('Nöbet bitti: ' + sez.label, 'seizure');
+      updateHead3DProfile();
       if (wasType === 'focal' || wasType === 'gtc' || wasType === 'spasm' || S.patient === 'status') {
         postT = t + 12; postDur = 12;
         mark('Postiktal yavaşlama', 'seizure');
@@ -1109,6 +1157,7 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
     }
     for (let i = 0; i < NAMES.length; i++) impNoise[i] = imp[i] > 10 ? 1 : 0;
     renderImp();
+    updateHead3DColors();
     const worst = Math.max(...imp);
     mark(`Empedans kontrolü · en yüksek ${worst.toFixed(1).replace('.', ',')} kΩ`, 'quality');
   }
@@ -1142,7 +1191,7 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
     MAT = maturationFor(ageYears);
     buildBands();
     const range = document.getElementById('age');
-    if (range) range.value = String(Math.round(ageYears));
+    if (range) range.value = String(ageYears);
     const out = document.getElementById('ageOut');
     if (out) out.textContent = ageText(ageYears);
     const note = document.getElementById('matNote');
@@ -1156,6 +1205,7 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
     CH = MONTAGES[key].build();
     annot('Montaj: ' + MONTAGES[key].name);
     drawHeadMontage();
+    updateHead3DChains();
     resize();
     draw();
   }
@@ -1166,6 +1216,7 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
     if (sez && sez.on) return;
     sez = { ...prof.seizure, on: true, t0: t, w0: wTot };
     mark('Nöbet başladı: ' + prof.seizure.label, 'seizure');
+    updateHead3DProfile();
     const bs = document.getElementById('bSeizure'); if (bs) bs.setAttribute('aria-pressed', 'true');
     if (auto) { annot('Aktivasyonla tetiklendi'); nextAutoSez = t + 25; }
   }
@@ -1582,6 +1633,7 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
     nextSpike = prof.spike && prof.spike.rate > 0 ? t + 0.8 + Math.random() * 1.8 : Infinity;
     if (prof.ageNum !== undefined) setAge(prof.ageNum, true);
     mark('Profil: ' + prof.name, 'scenario');
+    updateHead3DProfile();
     const bs = $('bSeizure'); if (bs) bs.setAttribute('aria-pressed', 'false');
     document.querySelectorAll('#cases .case').forEach(c => {
       const on = c.dataset.key === S.patient;
@@ -1865,6 +1917,398 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
   drawHeadMontage();
   renderMarkers();
   setAge(30, true);
+
+  // ---------- 3D 10-20 head ----------
+  let head3D = null;
+  function updateHead3DChains() { if (head3D) { head3D.chains(); head3D.profile(); } }
+  function updateHead3DColors() { if (head3D) head3D.colors(); }
+  function updateHead3DProfile() { if (head3D) head3D.profile(); }
+
+  function initHead3D() {
+    const stage = document.getElementById('head3dStage');
+    const canvas = document.getElementById('head3dCv');
+    const fallback = document.getElementById('head3dFallback');
+    const info = document.getElementById('head3dInfo');
+    if (!stage || !canvas || !fallback) return;
+    if (!window.THREE) {
+      fallback.textContent = '3B görünüm için Three.js yüklenemedi. İnternet bağlantısını kontrol edip sayfayı yenileyin; 2B kafa haritasını kullanmaya devam edebilirsiniz.';
+      return;
+    }
+    const T = window.THREE;
+    let renderer;
+    try {
+      renderer = new T.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    } catch (err) {
+      fallback.textContent = 'Tarayıcınız WebGL desteklemiyor; 2B kafa haritasını kullanabilirsiniz.';
+      return;
+    }
+    fallback.style.display = 'none';
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setClearColor(0x000000, 0);
+
+    const scene = new T.Scene();
+    const camera = new T.PerspectiveCamera(42, 1, 0.1, 100);
+    camera.position.set(0, 0.05, 4.4);
+    camera.lookAt(0, 0, 0);
+    scene.add(new T.AmbientLight(0xffffff, 0.6));
+    const keyLight = new T.DirectionalLight(0xffffff, 1.0); keyLight.position.set(2.6, 3.4, 4.2); scene.add(keyLight);
+    const fillLight = new T.DirectionalLight(0x9fb8ff, 0.32); fillLight.position.set(-3.2, -1.2, -3.6); scene.add(fillLight);
+
+    const RX = 0.9, RY = 0.95, RZ = 1.15;
+    const COL = {
+      left: 0x1f5fbf, right: 0xb8322a, mid: 0x2f7d57,
+      ok: 0x2f9e6b, warn: 0xd9a441, bad: 0xd1495b,
+      skin: 0xd8b49a, selected: 0xffd166,
+    };
+    const sideHex = side => side === 0 ? COL.left : side === 1 ? COL.right : COL.mid;
+    const sideOfName = n => /z$/.test(n) ? 2 : (+n.match(/\d$/)[0] % 2 ? 0 : 1);
+
+    const group = new T.Group();
+    scene.add(group);
+
+    function scalp(name) {
+      const [x, y] = EL[name];
+      const up = Math.sqrt(Math.max(0.02, 1 - (x / RX) * (x / RX) - (y / RY) * (y / RY)));
+      return new T.Vector3(x, up, -y * (RZ / RY)).multiplyScalar(1.006);
+    }
+
+    const skinMat = new T.MeshStandardMaterial({ color: COL.skin, roughness: 0.86, metalness: 0.02 });
+    const head = new T.Mesh(new T.SphereGeometry(1, 64, 48), skinMat);
+    head.scale.set(RX, 1, RZ);
+    group.add(head);
+    const wire = new T.Mesh(
+      new T.SphereGeometry(1.002, 24, 16),
+      new T.MeshBasicMaterial({ color: 0x6d8a91, wireframe: true, transparent: true, opacity: 0.075 })
+    );
+    wire.scale.set(RX, 1, RZ);
+    group.add(wire);
+    const nose = new T.Mesh(new T.SphereGeometry(0.1, 20, 16), skinMat);
+    nose.scale.set(0.9, 1.55, 1.0);
+    nose.position.set(0, 0.01, RZ + 0.02);
+    group.add(nose);
+    const earGeo = new T.SphereGeometry(0.13, 20, 14);
+    [-1, 1].forEach(s => {
+      const ear = new T.Mesh(earGeo, skinMat);
+      ear.scale.set(0.42, 1, 0.72);
+      ear.position.set(s * (RX + 0.012), -0.02, 0.02);
+      group.add(ear);
+    });
+    const neck = new T.Mesh(new T.CylinderGeometry(0.42, 0.5, 0.5, 32), skinMat);
+    neck.position.set(0, -1.04, 0.04);
+    group.add(neck);
+
+    const electrodeGeo = new T.SphereGeometry(0.043, 18, 12);
+    const electrodes = [];
+    const byName = {};
+    NAMES.forEach(n => {
+      const base = sideHex(sideOfName(n));
+      const mat = new T.MeshStandardMaterial({ color: base, roughness: 0.36, metalness: 0.16 });
+      const m = new T.Mesh(electrodeGeo, mat);
+      m.position.copy(scalp(n));
+      m.userData.name = n;
+      m.userData.base = base;
+      group.add(m);
+      electrodes.push(m);
+      byName[n] = m;
+    });
+
+    function makeLabel(text) {
+      const c = document.createElement('canvas');
+      c.width = 160; c.height = 80;
+      const g = c.getContext('2d');
+      g.font = '700 44px system-ui, -apple-system, sans-serif';
+      g.textAlign = 'center'; g.textBaseline = 'middle';
+      g.lineWidth = 9; g.strokeStyle = 'rgba(255,255,255,.94)';
+      g.strokeText(text, 80, 42);
+      g.fillStyle = '#152229';
+      g.fillText(text, 80, 42);
+      const tex = new T.CanvasTexture(c);
+      tex.anisotropy = 4;
+      const spr = new T.Sprite(new T.SpriteMaterial({ map: tex, transparent: true, depthTest: true, depthWrite: false }));
+      spr.scale.set(0.27, 0.135, 1);
+      return spr;
+    }
+    const labels = NAMES.map(n => {
+      const spr = makeLabel(n);
+      spr.position.copy(scalp(n)).multiplyScalar(1.11);
+      group.add(spr);
+      return spr;
+    });
+
+    const halo = new T.Mesh(
+      new T.SphereGeometry(0.085, 18, 12),
+      new T.MeshBasicMaterial({ color: COL.selected, transparent: true, opacity: 0.38, depthWrite: false })
+    );
+    halo.visible = false;
+    group.add(halo);
+
+    const chainGroup = new T.Group();
+    group.add(chainGroup);
+    let chainsVisible = true, labelsVisible = true, xray = false;
+    let selected = null;
+    let weights = new Array(NAMES.length).fill(0);
+
+    function arcPoints(list) {
+      const out = [];
+      for (let i = 0; i < list.length - 1; i++) {
+        const a = scalp(list[i]), b = scalp(list[i + 1]);
+        for (let k = 0; k < 8; k++) {
+          const p = a.clone().lerp(b, k / 8);
+          const nx = p.x / RX, ny = p.y, nz = p.z / RZ;
+          const len = Math.hypot(nx, ny, nz) || 1;
+          out.push(new T.Vector3(nx / len * RX, ny / len, nz / len * RZ).multiplyScalar(1.04));
+        }
+      }
+      out.push(scalp(list[list.length - 1]).multiplyScalar(1.04));
+      return out;
+    }
+    function disposeGroup(g) {
+      while (g.children.length) {
+        const c = g.children[g.children.length - 1];
+        g.remove(c);
+        if (c.geometry) c.geometry.dispose();
+        if (c.material) c.material.dispose();
+      }
+    }
+    function buildChains() {
+      disposeGroup(chainGroup);
+      chainGroup.visible = chainsVisible;
+      if (!chainsVisible) return;
+      const addTube = (points, color, radius, opacity) => {
+        const curve = new T.CatmullRomCurve3(points);
+        const tube = new T.Mesh(
+          new T.TubeGeometry(curve, 40, radius, 7, false),
+          new T.MeshBasicMaterial({ color, transparent: true, opacity, depthTest: !xray })
+        );
+        chainGroup.add(tube);
+      };
+      if (montageKey === 'cz') {
+        const cz = scalp('Cz');
+        NAMES.forEach(n => {
+          if (n === 'Cz') return;
+          const list = [n, 'Cz'];
+          addTube(arcPoints(list), sideHex(sideOfName(n)), 0.008, 0.7);
+        });
+        return;
+      }
+      const chains = MONTAGES[montageKey].chains || [];
+      chains.forEach(c => {
+        if (!c.list || c.list.length < 2) return;
+        const xs = c.list.map(n => EL[n][0]);
+        const avg = xs.reduce((a, b) => a + b, 0) / xs.length;
+        const side = c.side !== undefined ? c.side : avg < -0.12 ? 0 : avg > 0.12 ? 1 : 2;
+        addTube(arcPoints(c.list), sideHex(side), 0.011, 0.82);
+      });
+      if (selected) renderInfo(selected);
+    }
+
+    function regionName(n) {
+      let region = { Fp: 'frontopolar', F: 'frontal', C: 'santral', T: 'temporal', P: 'parietal', O: 'oksipital' }[n.replace(/\d/g, '')] || 'skalp';
+      if (n === 'F7' || n === 'F8') region = 'frontotemporal';
+      if (n === 'T3' || n === 'T4') region = 'orta temporal';
+      if (n === 'T5' || n === 'T6') region = 'posterior temporal';
+      const side = /z$/.test(n) ? 'orta hat' : (+n.match(/\d$/)[0] % 2 ? 'sol' : 'sağ');
+      return region + ' · ' + side;
+    }
+    function channelsFor(n) {
+      const i = IDX[n];
+      return CH.filter(c => c.a === i || c.b === i || (c.ref === 'cz' && n === 'Cz')).slice(0, 8).map(c => c.label);
+    }
+    function impColor(v) { return v > 10 ? COL.bad : v > 5 ? COL.warn : COL.ok; }
+    function renderInfo(name) {
+      if (!info) return;
+      const i = IDX[name], prof = PATIENTS[S.patient];
+      const chans = channelsFor(name);
+      const fw = weights[i] || 0;
+      const impVal = imp ? imp[i] : null;
+      const impTxt = impVal === null ? 'Ölçülmedi'
+        : `${impVal.toFixed(1).replace('.', ',')} kΩ · ${impVal > 10 ? 'yüksek, yeniden hazırlayın' : impVal > 5 ? 'sınırda' : 'uygun'}`;
+      info.innerHTML = `<b>${name}</b><span>${regionName(name)}</span>` +
+        `<dl><dt>Empedans</dt><dd>${impTxt}</dd>` +
+        `<dt>Kanallar</dt><dd>${chans.length ? chans.join(', ') : 'Bu montajda doğrudan kanal yok'}</dd>` +
+        (prof && fw > 0.2 ? `<dt>Profil</dt><dd>${prof.name} · odak/etkilenen elektrot</dd>` : '') +
+        `</dl>`;
+    }
+    function select(name) {
+      selected = name;
+      const m = byName[name];
+      if (m) { halo.position.copy(m.position).multiplyScalar(1.03); halo.visible = true; }
+      renderInfo(name);
+    }
+    function refreshWeights() {
+      const p = PATIENTS[S.patient];
+      const w = (sez && sez.on && sez.w) ? sez.w
+        : (p && ((p.spike && p.spike.w) || p.patternW || (p.seizure && p.seizure.w)));
+      const max = w ? Math.max(...w) : 0;
+      weights = NAMES.map((n, i) => (max > 0 && w && w[i]) ? w[i] / max : 0);
+    }
+    function updateColors() {
+      electrodes.forEach(m => {
+        const i = IDX[m.userData.name];
+        const c = imp ? impColor(imp[i]) : m.userData.base;
+        m.material.color.setHex(c);
+      });
+      if (selected) renderInfo(selected);
+    }
+
+    const rot = { x: 0, y: 0 }, target = { x: 0, y: 0 };
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let auto = !reduce, visible = true;
+    const spinBtn = document.getElementById('b3dSpin');
+    const labelsBtn = document.getElementById('b3dLabels');
+    const chainsBtn = document.getElementById('b3dChains');
+    const xrayBtn = document.getElementById('b3dXray');
+    if (spinBtn) spinBtn.setAttribute('aria-pressed', String(auto));
+
+    function setAuto(on) {
+      auto = on;
+      if (spinBtn) spinBtn.setAttribute('aria-pressed', String(on));
+    }
+    function nearestAngle(a, ref) { return ref + Math.atan2(Math.sin(a - ref), Math.cos(a - ref)); }
+    document.querySelectorAll('#kafa3d [data-view]').forEach(b => {
+      b.addEventListener('click', () => {
+        const map = { front: [0, 0], left: [0, Math.PI / 2], right: [0, -Math.PI / 2], top: [Math.PI / 2, 0], back: [0, Math.PI] };
+        const v = map[b.dataset.view];
+        if (!v) return;
+        target.x = nearestAngle(v[0], rot.x);
+        target.y = nearestAngle(v[1], rot.y);
+        setAuto(false);
+      });
+    });
+    if (spinBtn) spinBtn.addEventListener('click', () => setAuto(!auto));
+    if (labelsBtn) labelsBtn.addEventListener('click', () => {
+      labelsVisible = !labelsVisible;
+      labels.forEach(s => { s.visible = labelsVisible; });
+      labelsBtn.setAttribute('aria-pressed', String(labelsVisible));
+    });
+    if (chainsBtn) chainsBtn.addEventListener('click', () => {
+      chainsVisible = !chainsVisible;
+      chainGroup.visible = chainsVisible;
+      chainsBtn.setAttribute('aria-pressed', String(chainsVisible));
+      if (chainsVisible) buildChains();
+    });
+    if (xrayBtn) xrayBtn.addEventListener('click', () => {
+      xray = !xray;
+      skinMat.transparent = xray;
+      skinMat.opacity = xray ? 0.08 : 1;
+      skinMat.depthWrite = !xray;
+      skinMat.side = xray ? T.DoubleSide : T.FrontSide;
+      skinMat.needsUpdate = true;
+      wire.material.opacity = xray ? 0.17 : 0.075;
+      wire.material.needsUpdate = true;
+      electrodes.forEach(m => { m.material.depthTest = !xray; m.material.needsUpdate = true; });
+      labels.forEach(s => { s.material.depthTest = !xray; s.material.needsUpdate = true; });
+      chainGroup.children.forEach(c => { if (c.material) { c.material.depthTest = !xray; c.material.needsUpdate = true; } });
+      xrayBtn.setAttribute('aria-pressed', String(xray));
+    });
+    const zoomIn = document.getElementById('b3dZoomIn');
+    const zoomOut = document.getElementById('b3dZoomOut');
+    if (zoomIn) zoomIn.addEventListener('click', () => { camera.position.z = clamp(camera.position.z - 0.4, 2.9, 6.5); });
+    if (zoomOut) zoomOut.addEventListener('click', () => { camera.position.z = clamp(camera.position.z + 0.4, 2.9, 6.5); });
+
+    const raycaster = new T.Raycaster();
+    let drag = null;
+    canvas.addEventListener('pointerdown', e => {
+      drag = { x: e.clientX, y: e.clientY, moved: false };
+      if (canvas.setPointerCapture) canvas.setPointerCapture(e.pointerId);
+      setAuto(false);
+    });
+    canvas.addEventListener('pointermove', e => {
+      if (!drag) return;
+      const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+      if (Math.abs(dx) + Math.abs(dy) > 2) drag.moved = true;
+      target.y += dx * 0.008;
+      target.x = clamp(target.x + dy * 0.008, -1.35, 1.35);
+      drag.x = e.clientX; drag.y = e.clientY;
+    });
+    canvas.addEventListener('pointerup', e => {
+      if (!drag) return;
+      const moved = drag.moved;
+      drag = null;
+      if (moved) return;
+      const rect = canvas.getBoundingClientRect();
+      const p = new T.Vector2(
+        ((e.clientX - rect.left) / rect.width) * 2 - 1,
+        -((e.clientY - rect.top) / rect.height) * 2 + 1
+      );
+      raycaster.setFromCamera(p, camera);
+      const hits = raycaster.intersectObjects(electrodes, false);
+      if (hits.length) select(hits[0].object.userData.name);
+    });
+    canvas.addEventListener('pointercancel', () => { drag = null; });
+    canvas.addEventListener('wheel', e => {
+      e.preventDefault();
+      camera.position.z = clamp(camera.position.z + e.deltaY * 0.0015, 2.9, 6.5);
+    }, { passive: false });
+    canvas.addEventListener('dblclick', () => { target.x = 0; target.y = 0; });
+    canvas.addEventListener('keydown', e => {
+      const step = 0.14;
+      if (e.key === 'ArrowLeft') target.y += step;
+      else if (e.key === 'ArrowRight') target.y -= step;
+      else if (e.key === 'ArrowUp') target.x = clamp(target.x - step, -1.35, 1.35);
+      else if (e.key === 'ArrowDown') target.x = clamp(target.x + step, -1.35, 1.35);
+      else return;
+      e.preventDefault();
+      setAuto(false);
+    });
+
+    function sizing() {
+      const w = stage.clientWidth || 640;
+      const h = stage.clientHeight || 460;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    }
+    if (typeof ResizeObserver !== 'undefined') new ResizeObserver(sizing).observe(stage);
+    sizing();
+
+    if (typeof IntersectionObserver !== 'undefined') {
+      new IntersectionObserver(entries => { visible = entries[0].isIntersecting; }, { threshold: 0.05 }).observe(stage);
+    }
+
+    refreshWeights();
+    updateColors();
+    buildChains();
+
+    function animate() {
+      requestAnimationFrame(animate);
+      if (!visible) return;
+      if (auto) target.y += 0.0035;
+      rot.x += (target.x - rot.x) * 0.18;
+      rot.y += (target.y - rot.y) * 0.18;
+      group.rotation.set(rot.x, rot.y, 0);
+      const now = performance.now();
+      for (let i = 0; i < electrodes.length; i++) {
+        const wgt = weights[i];
+        const pulse = wgt > 0 ? 1 + 0.38 * wgt * (0.5 + 0.5 * Math.sin(now * 0.006 + i)) : 1;
+        electrodes[i].scale.setScalar(pulse);
+      }
+      if (labelsVisible) {
+        const v = new T.Vector3();
+        const wpx = canvas.clientWidth || 640, hpx = canvas.clientHeight || 460;
+        const items = labels.map(spr => {
+          spr.getWorldPosition(v);
+          const d = camera.position.distanceTo(v);
+          const p = v.clone().project(camera);
+          return { spr, x: (p.x * 0.5 + 0.5) * wpx, y: (-p.y * 0.5 + 0.5) * hpx, d };
+        }).sort((a, b) => a.d - b.d);
+        const shown = [];
+        items.forEach(it => {
+          it.spr.visible = !shown.some(s => Math.abs(s.x - it.x) < 46 && Math.abs(s.y - it.y) < 22);
+          if (it.spr.visible) shown.push(it);
+        });
+      }
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    head3D = {
+      chains: buildChains,
+      colors: updateColors,
+      profile: () => { refreshWeights(); if (selected) renderInfo(selected); },
+    };
+  }
+  initHead3D();
 
   new ResizeObserver(resize).observe(cv.parentElement);
   resize();
