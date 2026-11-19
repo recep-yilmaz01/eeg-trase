@@ -144,13 +144,72 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
 .case dd { margin: 0; }
 .case p { font-size: 13px; color: var(--muted); }
 .case .use { justify-self: start; }
+
+/* Age / maturation, tools, markers, scenarios and exam */
+.age-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.age-row input[type="range"] { width: 190px; accent-color: var(--accent); }
+.age-row output { font-family: var(--font-mono); font-size: 12px; color: var(--ink); white-space: nowrap; }
+.age-note { font-size: 12px; color: var(--muted); max-width: 36ch; }
+.tools { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); align-items: start; }
+.toolcard { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 12px; }
+.toolcard h3 { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: end; }
+.toolbar label { display: grid; gap: 4px; font-size: 12px; color: var(--muted); }
+.toolbar input[type="text"] { font: 500 13px/1 var(--font-body); color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 7px; padding: 8px 10px; min-width: 190px; }
+.imp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(86px, 1fr)); gap: 6px; }
+.imp-cell { border: 1px solid var(--line); border-radius: 7px; padding: 6px 8px; display: grid; gap: 2px; background: var(--paper); }
+.imp-cell b { font: 600 11px/1 var(--font-mono); }
+.imp-cell span { font: 500 12px/1.2 var(--font-mono); font-variant-numeric: tabular-nums; color: var(--muted); }
+.imp-cell.ok { border-color: #2f7d57; }
+.imp-cell.ok span { color: #2f7d57; }
+.imp-cell.warn { border-color: var(--mark); }
+.imp-cell.warn span { color: var(--mark); }
+.imp-cell.bad { border-color: var(--right); }
+.imp-cell.bad span { color: var(--right); }
+.imp-summary { font-size: 13px; color: var(--muted); }
+.marker-list { display: grid; max-height: 250px; overflow: auto; }
+.marker-row { display: grid; grid-template-columns: 52px minmax(0, 1fr) auto; gap: 8px; align-items: baseline; padding: 5px 0; border-bottom: 1px dashed var(--line); font-size: 13px; }
+.marker-row:last-child { border-bottom: 0; }
+.marker-time { font: 500 11px/1.2 var(--font-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.marker-kind { font: 500 10px/1 var(--font-mono); letter-spacing: .05em; text-transform: uppercase; border: 1px solid var(--line); border-radius: 999px; padding: 3px 6px; color: var(--muted); white-space: nowrap; }
+.marker-kind.seizure { border-color: var(--right); color: var(--right); }
+.marker-kind.quality { border-color: var(--accent); color: var(--accent); }
+.marker-kind.activation { border-color: var(--mark); color: var(--mark); }
+.scenarios { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); }
+.scenario { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 9px; align-content: start; }
+.scenario h3 { font-size: 15px; }
+.scenario .story, .scenario .expected, .scenario .protocol { font-size: 13px; color: var(--muted); }
+.scenario .expected { border-left: 3px solid var(--accent); padding-left: 10px; }
+.scenario .protocol { border-left: 3px solid var(--mark); padding-left: 10px; }
+.scenario .use { justify-self: start; }
+.exam-wrap { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); gap: 18px; align-items: start; }
+@media (max-width: 820px) { .exam-wrap { grid-template-columns: minmax(0, 1fr); } }
+.exam-visual { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 10px; }
+.exam-visual canvas { width: 100%; display: block; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); }
+.exam-side { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 14px; }
+.exam-q { border: 0; margin: 0; padding: 0; display: grid; gap: 6px; min-width: 0; }
+.exam-q legend { font-weight: 600; font-size: 14px; padding: 0; margin-bottom: 4px; }
+.exam-opt { display: flex; gap: 8px; align-items: flex-start; font-size: 13.5px; color: var(--ink); }
+.exam-opt input { margin-top: 3px; accent-color: var(--accent); }
+.exam-score { font-family: var(--font-mono); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.feedback { border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 7px; padding: 10px 12px; font-size: 13px; color: var(--muted); }
+.feedback.good { border-left-color: #2f7d57; }
+.feedback.bad { border-left-color: var(--right); }
+.template { overflow-x: auto; }
+@media print {
+  .sitenav, .instrument, #hastalar, #senaryolar, .tools, .exam-interactive, header .lede, .eyebrow { display: none !important; }
+  body { background: #fff; color: #000; }
+  .wrap { max-width: none; padding: 0; }
+  .card, .tbl { border-color: #999; }
+  .template { overflow: visible; }
+}
 </style>
 </head>
 <body>
 
 <div class="wrap">
   <header>
-    <nav class="sitenav" aria-label="Simülatörler"><a href="index.html" aria-current="page">EEG</a><a href="emg.html">EMG ve sinir iletimi</a><a href="#hastalar">Epilepsi örnekleri</a></nav>
+    <nav class="sitenav" aria-label="Simülatörler"><a href="index.html" aria-current="page">EEG</a><a href="emg.html">EMG ve sinir iletimi</a><a href="#senaryolar">Klinik senaryolar</a><a href="#hastalar">Epilepsi örnekleri</a><a href="#sinav">Öğrenci sınavı</a></nav>
     <div class="eyebrow">Elektronörofizyoloji · Çalışma aracı</div>
     <h1>EEG trase simülatörü</h1>
     <p class="lede">Ekrandaki çizgiler 10-20 sistemine göre yerleştirilmiş 19 elektrottan, bipolar boyuna montajla ("double banana") üretiliyor. Durumu değiştir, artefakt ekle, filtrelerle oyna; trasenin nasıl değiştiğini gerçek bir cihazdaki gibi izle. Veriler simülasyondur, gerçek hasta kaydı değildir.</p>
@@ -177,6 +236,14 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
           <button id="bSeizure" aria-pressed="false">Nöbet başlat</button>
           <button id="bSpike">Diken ekle</button>
         </div>
+      </div>
+      <div class="group">
+        <span class="label">Yaş / matürasyon</span>
+        <div class="age-row">
+          <input type="range" id="age" min="0" max="90" step="0.5" value="30" aria-label="Hasta yaşı">
+          <output id="ageOut" for="age">30 yaş</output>
+        </div>
+        <span class="age-note" id="matNote">Yetişkin · PDR 10 Hz</span>
       </div>
       <div class="group">
         <span class="label">Aktivasyon</span>
@@ -210,6 +277,14 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
       <div class="group">
         <span class="label">Cihaz ayarları</span>
         <div class="settings">
+          <label for="montage">Montaj
+            <select id="montage">
+              <option value="long" selected>Boyuna bipolar</option>
+              <option value="trans">Transvers bipolar</option>
+              <option value="avg">Ortalama referans</option>
+              <option value="cz">Cz referans</option>
+            </select>
+          </label>
           <label for="sens">Hassasiyet
             <select id="sens"><option value="5">5 µV/mm</option><option value="7" selected>7 µV/mm</option><option value="10">10 µV/mm</option><option value="15">15 µV/mm</option><option value="20">20 µV/mm</option></select>
           </label>
@@ -223,6 +298,8 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
             <select id="hff"><option value="15">15 Hz</option><option value="35">35 Hz</option><option value="70" selected>70 Hz</option></select>
           </label>
           <label class="check" for="notch"><input type="checkbox" id="notch"> Notch 50 Hz</label>
+          <button id="bImp" aria-pressed="false">Empedans</button>
+          <button id="bCal" aria-pressed="false">Biyokalibrasyon</button>
           <button id="bPause" aria-pressed="false">Durdur</button>
         </div>
       </div>
@@ -231,12 +308,88 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
     <div class="status" id="status"></div>
   </section>
 
+  <section class="tools" aria-label="Kalite kontrol ve olay işaretleyicileri">
+    <div class="toolcard" id="impCard" hidden>
+      <h3>Empedans kontrolü <button id="bImpAgain" type="button">Yeniden ölç</button></h3>
+      <div class="imp-grid" id="impGrid"></div>
+      <p class="imp-summary" id="impSummary"></p>
+      <p class="note">Hedef: 5 kΩ altı (yeşil). 5–10 kΩ sarı, 10 kΩ üzeri kırmızı. Yüksek empedanslı elektrotlar 50 Hz şebeke gürültüsüne daha açıktır; traselerde o elektrodu içeren kanallarda bulanıklaşma görülür.</p>
+    </div>
+    <div class="toolcard">
+      <h3>Olay işaretleyicileri <span class="marker-kind">teknisyen notu</span></h3>
+      <div class="toolbar">
+        <label for="markerText">Özel işaret
+          <input type="text" id="markerText" maxlength="48" placeholder="örn. uyarı, ilaç, doz">
+        </label>
+        <button id="bMarker" type="button">İşaretle</button>
+        <button type="button" class="qmark" data-marker="Göz açma">Göz açma</button>
+        <button type="button" class="qmark" data-marker="Göz kapama">Göz kapama</button>
+        <button type="button" class="qmark" data-marker="Fotik uyarım">Fotik</button>
+        <button type="button" class="qmark" data-marker="Nöbet başlangıcı">Nöbet</button>
+        <button type="button" class="qmark" data-marker="Teknisyen uyarısı">Uyarı</button>
+      </div>
+      <div class="marker-list" id="markerList"></div>
+      <p class="note">İşaretler trasede dikey çizgi ve etiket olarak görünür. Sınavda olay zamanlamasını ve artefakt/aktivasyon ayrımını belgelemek için kullanılır.</p>
+    </div>
+  </section>
+
+  <section id="senaryolar" style="display:grid;gap:14px">
+    <div>
+      <h2>Klinik senaryolar</h2>
+      <p class="note">Her senaryo yaş, uyanıklık durumu, montaj ve aktivasyonu birlikte yükler. Önce beklenen bulguyu okuyun, sonra traseyi inceleyin; öğrenci uygulama sınavında bu akışı tekrarlayın.</p>
+    </div>
+    <div class="scenarios" id="scenarioList"></div>
+  </section>
+
   <section id="hastalar" style="display:grid;gap:14px">
     <div>
       <h2>Epileptik hasta örnekleri</h2>
       <p class="note">Aşağıdaki profiller sentetiktir ve anonimleştirilmiş örnek kayıtlardan esinlenerek hazırlanmıştır; gerçek hasta verisi değildir. Bir profili yüklediğinizde simülatör o hastanın interiktal dikenlerini, odak dağılımını ve nöbet paternini üretir. "Nöbet başlat" düğmesiyle deşarjı elle tetikleyebilirsiniz.</p>
     </div>
     <div class="cases" id="cases"></div>
+  </section>
+
+  <section id="sinav" style="display:grid;gap:14px">
+    <div>
+      <h2>Öğrenci uygulama sınavı</h2>
+      <p class="note">Rastgele bir olgu trasesi açılır; tanı ve patern sorulur. Doğru cevap ve kısa açıklama ancak "Cevapla" sonrası gösterilir. Puan aynı oturumda birikir. Aşağıdaki şablon, sözlü/uygulama sınavında istasyon değerlendirmesi için yazdırılabilir.</p>
+    </div>
+    <div class="exam-wrap exam-interactive">
+      <div class="exam-visual">
+        <div class="exam-score" id="examScore">Puan: 0 / 0</div>
+        <canvas id="examCv" width="660" height="340" role="img" aria-label="Sınav olgusu EEG trasesi"></canvas>
+        <p class="story" id="examVignette"></p>
+      </div>
+      <div class="exam-side">
+        <form id="examForm"></form>
+        <div class="toolbar">
+          <button id="bExamSubmit" type="submit" form="examForm">Cevapla</button>
+          <button id="bNewCase" type="button">Yeni olgu</button>
+        </div>
+        <div id="examFeedback"></div>
+      </div>
+    </div>
+    <details id="examTemplate">
+      <summary><b>Uygulama sınavı şablonu</b> (istasyonlar, puanlama, yazdırılabilir)</summary>
+      <div class="template" style="margin-top:12px">
+        <table>
+          <thead><tr><th>İstasyon</th><th>Beklenen uygulama</th><th>Puan</th></tr></thead>
+          <tbody>
+            <tr><td>1. Montaj ve kanal tanıma</td><td>Boyuna/transvers/ortalama referans montajlarını tanır; Fp1-F7, T4-T6 gibi kanalları doğru okur.</td><td class="num">10</td></tr>
+            <tr><td>2. Empedans kontrolü</td><td>Elektrot empedanslarını ölçer, &gt;10 kΩ elektrodu saptar, düzeltme basamaklarını açıklar.</td><td class="num">10</td></tr>
+            <tr><td>3. Biyokalibrasyon</td><td>Kare dalga kalibrasyon sinyalini tanır; kazanç, polarite ve kanal eşitliğini değerlendirir.</td><td class="num">10</td></tr>
+            <tr><td>4. Artefakt tanıma</td><td>Göz kırpma, kas, EKG, terleme, 50 Hz ve elektrot atmasını birbirinden ayırır.</td><td class="num">20</td></tr>
+            <tr><td>5. Epileptiform patern</td><td>Diken, keskin dalga, 3 Hz diken-dalga, fokal deşarj, hipsaritmi ve burst-süpresyonu tanır.</td><td class="num">20</td></tr>
+            <tr><td>6. Yaş ve matürasyon</td><td>Yaşa göre posterior dominant ritmi (PDR), amplitüd ve uyku paternlerini yorumlar.</td><td class="num">10</td></tr>
+            <tr><td>7. Raporlama ve güvenlik</td><td>Montaj, filtre, uyarım ve olay işaretlerini kaydeder; nöbet/aktivasyon sırasında güvenliği açıklar.</td><td class="num">20</td></tr>
+            <tr><td colspan="2"><b>Toplam</b></td><td class="num"><b>100</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="toolbar" style="margin-top:12px">
+        <button id="bPrint" type="button">Şablonu yazdır</button>
+      </div>
+    </details>
   </section>
 
   <div class="cols">
@@ -396,6 +549,48 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
   const sig = x => 1 / (1 + Math.exp(-x));
   const win = (tau, a, b) => sig((tau - a) / 0.03) - sig((tau - b) / 0.03);
 
+  // ---------- Age and maturation ----------
+  // Posterior dominant rhythm (PDR) and amplitude scaling by age. Values are
+  // approximate teaching ranges, not patient-specific norms.
+  const AGE_PTS = [
+    [0, 3.2, 0.55, 1.55, 0.40],
+    [0.25, 4.0, 0.65, 1.48, 0.45],
+    [0.5, 5.0, 0.75, 1.40, 0.50],
+    [1, 6.0, 0.88, 1.30, 0.60],
+    [2, 6.8, 1.00, 1.25, 0.75],
+    [4, 7.6, 1.14, 1.20, 0.85],
+    [6, 8.4, 1.20, 1.12, 0.95],
+    [8, 9.0, 1.15, 1.08, 1.00],
+    [10, 9.5, 1.10, 1.05, 1.05],
+    [13, 9.9, 1.05, 1.02, 1.10],
+    [18, 10.0, 1.00, 1.00, 1.15],
+    [40, 10.0, 0.95, 1.02, 1.10],
+    [60, 9.6, 0.85, 1.12, 1.00],
+    [75, 9.2, 0.75, 1.22, 0.90],
+    [90, 8.8, 0.68, 1.28, 0.82],
+  ];
+  function maturationFor(years) {
+    const a = clamp(years, 0, 90);
+    let i = 0;
+    while (i < AGE_PTS.length - 1 && a > AGE_PTS[i + 1][0]) i++;
+    const p0 = AGE_PTS[i], p1 = AGE_PTS[Math.min(i + 1, AGE_PTS.length - 1)];
+    const f = p1[0] === p0[0] ? 0 : (a - p0[0]) / (p1[0] - p0[0]);
+    const val = k => p0[k] + (p1[k] - p0[k]) * f;
+    const label = a < 0.08 ? 'Yenidoğan' : a < 1 ? 'Süt çocuğu' : a < 3 ? 'Oyun çocuğu'
+      : a < 6 ? 'Okul öncesi' : a < 12 ? 'Okul çağı' : a < 18 ? 'Ergen'
+      : a < 65 ? 'Yetişkin' : 'Yaşlı';
+    return {
+      pdr: val(1), alpha: val(2), slow: val(3), beta: val(4),
+      label,
+      note: `${label} · PDR ${val(1).toFixed(1).replace('.', ',')} Hz · alfa amplitüdü ${val(2) >= 1.1 ? 'yüksek' : val(2) <= 0.8 ? 'düşük' : 'normal'}`,
+    };
+  }
+  function ageText(years) {
+    return years < 1 ? `${Math.round(years * 12)} ay` : `${Math.round(years)} yaş`;
+  }
+  let ageYears = 30;
+  let MAT = maturationFor(ageYears);
+
   // ---------- Epilepsy profiles (simulated, anonymised) ----------
   // Voltage field of a source: 1 at the focus, falling off with distance.
   // A null focus means a generalised discharge, strongest in frontal regions.
@@ -413,13 +608,13 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
   }
   const PATIENTS = {
     none: {
-      name: 'Sağlıklı gönüllü', tag: 'Referans', age: '—', sex: '—',
+      name: 'Sağlıklı gönüllü', tag: 'Referans', age: '—', ageNum: 30, sex: '—',
       dx: 'Epilepsi yok', focus: '—', act: '—', trace: 'Normal zemin aktivitesi',
       note: 'Karşılaştırma için normal, epileptiform deşarj içermeyen kayıt.',
       spike: { rate: 0 }, seizure: null, preview: null,
     },
     absans: {
-      name: 'Absans epilepsisi', tag: 'Jeneralize', age: '9', sex: 'K',
+      name: 'Absans epilepsisi', tag: 'Jeneralize', age: '9', ageNum: 9, sex: 'K',
       dx: 'Çocukluk çağı absans epilepsisi', focus: 'Jeneralize (frontal belirgin)',
       act: 'Hiperventilasyon, fotik', trace: '3 Hz diken-dalga, 3–4 sn',
       note: 'Ani bilinç kaybı ve gözlerde dalma. Yüksek amplitüdlü 3 Hz jeneralize diken-dalga deşarjları.',
@@ -428,7 +623,7 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
       preview: { chans: [['Fp1', 'F3'], ['F3', 'C3'], ['C3', 'P3'], ['Fp2', 'F4'], ['F4', 'C4']], sw: [1.2, 4.4] },
     },
     temporal: {
-      name: 'Sağ temporal fokal epilepsi', tag: 'Fokal', age: '34', sex: 'E',
+      name: 'Sağ temporal fokal epilepsi', tag: 'Fokal', age: '34', ageNum: 34, sex: 'E',
       dx: 'Mezial temporal skleroz', focus: 'T4 / T6 (sağ temporal)',
       act: 'Uyku, yorgunluk', trace: 'Sağ temporal keskin dalga ve fokal nöbet',
       note: 'İnteriktal dönemde sağ temporal keskin dalgalar; nöbette 5–7 Hz ritmik aktivite.',
@@ -437,7 +632,7 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
       preview: { chans: [['Fp2', 'F8'], ['F8', 'T4'], ['T4', 'T6'], ['Fp1', 'F7'], ['F7', 'T3']], spikes: [0.8, 1.9, 3.0, 4.2] },
     },
     frontal: {
-      name: 'Sol frontal fokal epilepsi', tag: 'Fokal', age: '22', sex: 'K',
+      name: 'Sol frontal fokal epilepsi', tag: 'Fokal', age: '22', ageNum: 22, sex: 'K',
       dx: 'Frontal lob epilepsisi', focus: 'F3 / F7 (sol frontal)',
       act: 'Uyku (gece nöbeti)', trace: 'Sol frontal keskin dalgalar, kısa nöbet',
       note: 'Kısa süreli, gece gelen nöbetler. İnteriktal keskin dalgalar sol frontal bölgede belirgin.',
@@ -446,7 +641,7 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
       preview: { chans: [['Fp1', 'F3'], ['F3', 'C3'], ['F7', 'T3'], ['Fp2', 'F4'], ['F4', 'C4']], spikes: [1.0, 2.5, 3.8] },
     },
     rolandik: {
-      name: 'Rolandik epilepsi', tag: 'Fokal · çocuk', age: '7', sex: 'E',
+      name: 'Rolandik epilepsi', tag: 'Fokal · çocuk', age: '7', ageNum: 7, sex: 'E',
       dx: 'Benign rolandik epilepsi', focus: 'C3 / C4 (santrotemporal)',
       act: 'Uyku N2', trace: 'Santrotemporal keskin dalga',
       note: 'Uykuda artan, yüksek amplitüdlü santrotemporal keskin dalgalar; prognozu iyidir.',
@@ -455,7 +650,7 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
       preview: { chans: [['F3', 'C3'], ['C3', 'P3'], ['F4', 'C4'], ['C4', 'P4'], ['Fz', 'Cz']], spikes: [1.2, 2.7, 4.0] },
     },
     jme: {
-      name: 'Juvenil miyoklonik epilepsi', tag: 'Jeneralize', age: '16', sex: 'K',
+      name: 'Juvenil miyoklonik epilepsi', tag: 'Jeneralize', age: '16', ageNum: 16, sex: 'K',
       dx: 'JME', focus: 'Jeneralize (frontosantral)',
       act: 'Uyanma, uykusuzluk', trace: 'Poli-diken ve miyoklonik patlama',
       note: 'Sabah miyoklonileri; jeneralize poli-diken patlamaları ve tonik-klonik nöbet eğilimi.',
@@ -464,7 +659,7 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
       preview: { chans: [['Fp1', 'F3'], ['F3', 'C3'], ['Fz', 'Cz'], ['Fp2', 'F4'], ['F4', 'C4']], spikes: [0.9, 2.2, 3.6], poly: true },
     },
     photosensitive: {
-      name: 'Fotosensitif epilepsi', tag: 'Refleks', age: '12', sex: 'E',
+      name: 'Fotosensitif epilepsi', tag: 'Refleks', age: '12', ageNum: 12, sex: 'E',
       dx: 'Fotosensitif oksipital epilepsi', focus: 'O1 / O2 (oksipital)',
       act: 'Fotik uyarım', trace: 'Fotik sürüklenme ve oksipital diken',
       note: 'Flaş ışıkla oksipitalde diken-dalga; 14–20 Hz fotik uyarım nöbeti tetikleyebilir.',
@@ -472,30 +667,98 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
       seizure: { type: 'ps', f: 8, dur: 8, amp: 200, label: 'Fotosensitif deşarj', w: field('O2', 0.50) },
       preview: { chans: [['T5', 'O1'], ['T6', 'O2'], ['P3', 'O1'], ['P4', 'O2'], ['Fp1', 'F7']], spikes: [2.3, 3.5, 4.4], photic: true },
     },
+    west: {
+      name: 'West sendromu (hipsaritmi)', tag: 'Epileptik ensefalopati', age: '6 ay', ageNum: 0.5, sex: 'E',
+      dx: 'West sendromu / infantil spazm', focus: 'Multifokal (jeneralize)',
+      act: 'Uyku, spazm kümesi', trace: 'Hipsaritmi: kaotik yüksek amplitüdlü yavaş aktivite + multifokal dikenler',
+      note: 'Süt çocuğunda gelişim geriliği ve spazm kümeleri. Zemin kaotik, yüksek amplitüdlü; multifokal dikenler ve yavaş dalgalar bir arada.',
+      spike: { rate: 0.70, amp: 180, w: field(null) },
+      pattern: 'hyps', patternW: field(null),
+      seizure: { type: 'spasm', dur: 10, amp: 260, label: 'Spazm kümesi', w: field(null) },
+      preview: { chans: [['Fp1', 'F3'], ['F3', 'C3'], ['C3', 'P3'], ['Fp2', 'F4'], ['F4', 'C4'], ['Fz', 'Cz']], hyps: true },
+    },
+    status: {
+      name: 'Nonkonvulsif status', tag: 'Status', age: '45', ageNum: 45, sex: 'K',
+      dx: 'Nonkonvulsif status epileptikus', focus: 'Jeneralize',
+      act: '—', trace: 'Sürekli 2,5 Hz diken-dalga / ritmik yavaş aktivite',
+      note: 'Konfüzyon veya bilinç değişikliği ile gelen hastada sürekli ritmik epileptiform aktivite. Acil tedavi gerektirir.',
+      spike: { rate: 0.45, amp: 150, w: field(null) },
+      seizure: { type: 'sw', f: 2.5, dur: 18, amp: 240, label: 'Status pattern', w: field(null) },
+      preview: { chans: [['Fp1', 'F3'], ['F3', 'C3'], ['C3', 'P3'], ['Fp2', 'F4'], ['F4', 'C4']], sw: [0.4, 4.8], swF: 2.5 },
+    },
+    burst: {
+      name: 'Burst-süpresyon (ensefalopati)', tag: 'Ensefalopati', age: '3', ageNum: 3, sex: 'E',
+      dx: 'Hipoksik-iskemik ensefalopati', focus: 'Jeneralize',
+      act: '—', trace: 'Burst-süpresyon: düz zemin + yüksek amplitüdlü patlamalar',
+      note: 'Ağır kortikal disfonksiyonda görülür. Uzun süreli baskılanma dönemleri arasında karışık frekanslı patlamalar bulunur.',
+      spike: { rate: 0 },
+      pattern: 'burst', patternW: field(null),
+      seizure: null,
+      preview: { chans: [['Fp1', 'F3'], ['F3', 'C3'], ['C3', 'P3'], ['Fp2', 'F4'], ['F4', 'C4']], burst: true },
+    },
   };
   let sez = null, nextSpike = Infinity, nextAutoSez = 0;
 
-  const CHAINS = [
+  // ---------- Montages ----------
+  const LONG_CHAINS = [
     { side: 0, list: ['Fp1', 'F7', 'T3', 'T5', 'O1'] },
     { side: 1, list: ['Fp2', 'F8', 'T4', 'T6', 'O2'] },
     { side: 0, list: ['Fp1', 'F3', 'C3', 'P3', 'O1'] },
     { side: 1, list: ['Fp2', 'F4', 'C4', 'P4', 'O2'] },
     { side: 2, list: ['Fz', 'Cz', 'Pz'] },
   ];
-  const CH = [];
-  CHAINS.forEach((c, ci) => {
-    for (let i = 0; i < c.list.length - 1; i++) {
-      CH.push({ a: IDX[c.list[i]], b: IDX[c.list[i + 1]], label: c.list[i] + '-' + c.list[i + 1], side: c.side, chain: ci });
-    }
-  });
+  const TRANS_CHAINS = [
+    { list: ['F7', 'F3', 'Fz', 'F4', 'F8'] },
+    { list: ['T3', 'C3', 'Cz', 'C4', 'T4'] },
+    { list: ['T5', 'P3', 'Pz', 'P4', 'T6'] },
+    { list: ['Fp1', 'Fp2'] },
+    { list: ['O1', 'O2'] },
+  ];
+  function pairSide(a, b) {
+    const x = (EL[NAMES[a]][0] + EL[NAMES[b]][0]) / 2;
+    return x < -0.12 ? 0 : x > 0.12 ? 1 : 2;
+  }
+  function channelsFromChains(chains) {
+    const out = [];
+    chains.forEach((c, ci) => {
+      for (let i = 0; i < c.list.length - 1; i++) {
+        out.push({
+          a: IDX[c.list[i]], b: IDX[c.list[i + 1]],
+          label: c.list[i] + '-' + c.list[i + 1],
+          side: c.side === undefined ? pairSide(IDX[c.list[i]], IDX[c.list[i + 1]]) : c.side,
+          chain: ci, ref: null,
+        });
+      }
+    });
+    return out;
+  }
+  const MONTAGES = {
+    long: { name: 'Boyuna bipolar (double banana)', chains: LONG_CHAINS, build: () => channelsFromChains(LONG_CHAINS) },
+    trans: { name: 'Transvers bipolar', chains: TRANS_CHAINS, build: () => channelsFromChains(TRANS_CHAINS) },
+    avg: {
+      name: 'Ortalama referans (AV)', chains: [],
+      build: () => NAMES.map((n, i) => ({ a: i, b: null, ref: 'avg', label: n + '-AV', side: EL[n][0] < -0.1 ? 0 : EL[n][0] > 0.1 ? 1 : 2, chain: 0 })),
+    },
+    cz: {
+      name: 'Cz referans', chains: [],
+      build: () => NAMES.filter(n => n !== 'Cz').map(n => ({ a: IDX[n], b: null, ref: 'cz', label: n + '-Cz', side: EL[n][0] < -0.1 ? 0 : EL[n][0] > 0.1 ? 1 : 2, chain: 0 })),
+    },
+  };
+  let montageKey = 'long';
+  let CH = MONTAGES.long.build();
 
   // ---------- Sources ----------
-  const RH = { alpha: [10, 4], beta: [20, 1.5], theta: [6, 2], delta: [1.2, 1] };
-  const shared = {};
-  for (const r in RH) shared[r] = [new Band(...RH[r]), new Band(...RH[r])];
-  const local = NAMES.map(() => {
-    const o = {}; for (const r in RH) o[r] = new Band(...RH[r]); return o;
-  });
+  const RHYTHMS = ['alpha', 'beta', 'theta', 'delta'];
+  let shared = {}, local = [];
+  function buildBands() {
+    const RH = { alpha: [MAT.pdr, 4], beta: [20, 1.5], theta: [6, 2], delta: [1.2, 1] };
+    shared = {};
+    for (const r of RHYTHMS) shared[r] = [new Band(...RH[r]), new Band(...RH[r])];
+    local = NAMES.map(() => {
+      const o = {}; for (const r of RHYTHMS) o[r] = new Band(...RH[r]); return o;
+    });
+  }
+  buildBands();
   const drift = NAMES.map(() => ({ v: 0 }));
   const emgF = NAMES.map(() => new Biquad('hp', 25));
 
@@ -523,17 +786,27 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
   let nextAuto = 2, nextSleepEv = 3, nextBeat = 0.4;
   let emgEnv = 0.8;
   const annots = [];
+  let postT = 0, postDur = 1;
+  let cal = null;
+  let imp = null;
+  const impNoise = new Uint8Array(NAMES.length);
+  const markerLog = [];
+  let nextHyps = 0;
 
-  // ---------- Per-channel filters and ring buffers ----------
-  let filt = [];
+  // ---------- Per-electrode filters and ring buffers ----------
+  // Filtering each electrode first is equivalent to filtering each bipolar
+  // channel (linear filters commute with subtraction), so the montage can be
+  // switched instantly without rebuilding filter state.
+  let filtE = [];
   function buildFilters() {
-    filt = CH.map(() => ({
+    filtE = NAMES.map(() => ({
       hp: new Biquad('hp', S.lff), lp1: new Biquad('lp', S.hff), lp2: new Biquad('lp', S.hff),
       notch: new Biquad('notch', 50, 5),
     }));
   }
   buildFilters();
-  const buf = CH.map(() => new Float32Array(BUF));
+  const bufE = NAMES.map(() => new Float32Array(BUF));
+  const bufAvg = new Float32Array(BUF);
   const photicBuf = new Uint8Array(BUF);
 
   function eventVal(ev, tau, e) {
@@ -606,9 +879,18 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
       return s.amp * w * env * (spike + slow);
     }
     if (s.type === 'focal') {
-      const x = Math.sin(2 * Math.PI * s.f * tau);
+      const prog = clamp(tau / s.dur, 0, 1);
+      const f = s.f * (1 - 0.35 * prog);
+      const x = Math.sin(2 * Math.PI * f * tau);
       const sharp = -Math.sign(x) * Math.pow(Math.abs(x), 0.55);
-      return s.amp * w * env * (sharp + 0.3 * Math.sin(2 * Math.PI * (s.f / 3) * tau));
+      const e2 = clamp(tau / 1.5, 0, 1) * clamp((s.dur - tau) / 2, 0, 1);
+      return s.amp * w * e2 * (sharp + 0.35 * Math.sin(2 * Math.PI * (f / 3) * tau));
+    }
+    if (s.type === 'spasm') {
+      const ph = (tau * 1.2) % 1, d = cyc(ph);
+      const burst = Math.exp(-Math.pow(d / 0.09, 2));
+      const slow = -Math.sin(Math.PI * clamp(ph / 0.9, 0, 1));
+      return s.amp * w * env * burst * (slow + 0.3 * Math.sin(2 * Math.PI * 11 * tau));
     }
     if (s.type === 'gtc') {
       const f = 10 - 7 * clamp(tau / s.dur, 0, 1);
@@ -650,8 +932,15 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
         `${prof.focus.split(' ')[0]} diken`);
       nextSpike = t + (-Math.log(1 - Math.random())) / prof.spike.rate;
     }
+    // hypsarrhythmia: multifocal random spikes on top of the chaotic background
+    if (prof.pattern === 'hyps' && t > nextHyps) {
+      const name = NAMES[Math.floor(Math.random() * NAMES.length)];
+      addEvent('spike', { w: field(name, 0.30), amp: 130 + Math.random() * 150 }, null);
+      nextHyps = t + 0.12 + Math.random() * 0.45;
+    }
     // hyperventilation is a classic trigger for absence discharges
     if (S.hv && S.patient === 'absans' && hvLvl > 0.55 && !(sez && sez.on) && Math.random() < dt * 0.15) startSeizure(true);
+    if (S.patient === 'status' && !(sez && sez.on) && t > nextAutoSez) startSeizure(true);
     if (S.ecg && t > nextBeat) { beatT0 = t; nextBeat = t + 0.8 + (Math.random() - 0.5) * 0.06; }
     emgEnv += ((0.4 + Math.random() * 1.2) - emgEnv) * 0.002;
     hvLvl += ((S.hv ? 1 : 0) - hvLvl) * dt / (S.hv ? 18 : 10);
@@ -674,13 +963,16 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
         if (S.patient === 'photosensitive' && !(sez && sez.on) && t > nextAutoSez && Math.random() < 0.004) startSeizure(true);
       }
     }
+    const post = postT > t ? clamp((postT - t) / postDur, 0, 1) : 0;
     const A = {
-      alpha: S.amp.alpha, beta: S.amp.beta,
-      theta: S.amp.theta + 22 * hvLvl, delta: S.amp.delta + 60 * hvLvl,
+      alpha: S.amp.alpha * MAT.alpha * (1 - 0.6 * post),
+      beta: S.amp.beta * MAT.beta * (1 - 0.4 * post),
+      theta: (S.amp.theta + 22 * hvLvl) * MAT.slow + 20 * post,
+      delta: (S.amp.delta + 60 * hvLvl) * MAT.slow + 55 * post,
     };
 
     const sh = {};
-    for (const r in RH) sh[r] = [shared[r][0].next(), shared[r][1].next()];
+    for (const r of RHYTHMS) sh[r] = [shared[r][0].next(), shared[r][1].next()];
     const alphaEnv = 0.7 + 0.3 * Math.sin(2 * Math.PI * 0.17 * t) * Math.sin(2 * Math.PI * 0.05 * t + 1);
     const line = Math.sin(2 * Math.PI * 50 * t);
     const ecg = ecgShape(t - beatT0);
@@ -688,7 +980,7 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
     for (let e = 0; e < NAMES.length; e++) {
       const g = G[e], L = local[e];
       let v = 0;
-      for (const r in RH) {
+      for (const r of RHYTHMS) {
         const s = g.side === 2 ? 0.5 * (sh[r][0] + sh[r][1]) : sh[r][g.side];
         let a = A[r] * g[r] * (0.75 * s + 0.45 * L[r].next());
         if (r === 'alpha') a *= alphaEnv;
@@ -696,10 +988,24 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
       }
       const d = drift[e]; d.v = 0.995 * d.v + randn() * 1.2; v += d.v;
       v += randn() * 1.5;
+      // pathological background patterns
+      if (prof.pattern === 'hyps') {
+        const w = prof.patternW[e];
+        v = v * 0.5 + w * (150 * Math.sin(2 * Math.PI * 1.5 * t + e * 1.1)
+          + 90 * Math.sin(2 * Math.PI * 2.9 * t + e * 2.3)
+          + 65 * Math.sin(2 * Math.PI * 0.7 * t + e * 0.6));
+      } else if (prof.pattern === 'burst') {
+        const cyc = (t + e * 0.03) % 6.5;
+        const burst = win(cyc, 0.08, 1.6);
+        const w = prof.patternW[e];
+        v = v * (0.05 + 0.95 * burst)
+          + w * burst * (185 * Math.sin(2 * Math.PI * 2.2 * t + e) + 95 * Math.sin(2 * Math.PI * 9 * t + e * 1.7));
+      }
       let musc = S.emg ? g.temp * emgEnv : 0;
       if (sweatLvl > 0.001) v += 150 * sweatLvl * g.sweat * Math.sin(2 * Math.PI * g.sweatF * t + g.sweatPh);
       if (S.line) v += g.line * line;
       if (S.ecg) v += 40 * g.ecg * ecg;
+      if (impNoise[e]) v += 16 * Math.sin(2 * Math.PI * 50 * t + e * 0.9);
       for (const E of events) {
         const tau = t - E.t0;
         if (tau >= 0 && tau < EVDUR[E.type]) { v += eventVal(E, tau, e); musc += eventMusc(E, tau, e); }
@@ -718,21 +1024,35 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
     if (events.length) events = events.filter(E => t - E.t0 < EVDUR[E.type]);
 
     if (sez && sez.on && t - sez.t0 >= sez.dur) {
+      const wasType = sez.type;
       sez.on = false;
-      annot('Nöbet bitti');
+      mark('Nöbet bitti: ' + sez.label, 'seizure');
+      if (wasType === 'focal' || wasType === 'gtc' || wasType === 'spasm' || S.patient === 'status') {
+        postT = t + 12; postDur = 12;
+        mark('Postiktal yavaşlama', 'seizure');
+      }
       const bs = document.getElementById('bSeizure'); if (bs) bs.setAttribute('aria-pressed', 'false');
       nextSpike = t + 1 + Math.random() * 2;
+      if (S.patient === 'status') nextAutoSez = t + 3;
+    }
+    if (cal && t - cal.t0 >= cal.dur) {
+      cal = null;
+      const bc = document.getElementById('bCal'); if (bc) bc.setAttribute('aria-pressed', 'false');
+      mark('Biyokalibrasyon bitti', 'quality');
     }
 
     const w = wTot % BUF;
-    for (let c = 0; c < CH.length; c++) {
-      const f = filt[c];
-      let y = ev[CH[c].a] - ev[CH[c].b];
+    let sum = 0;
+    for (let e = 0; e < NAMES.length; e++) {
+      const f = filtE[e];
+      let y = ev[e];
       y = f.hp.step(y);
       y = f.lp2.step(f.lp1.step(y));
       if (S.notch) y = f.notch.step(y);
-      buf[c][w] = y;
+      bufE[e][w] = y;
+      sum += y;
     }
+    bufAvg[w] = sum / NAMES.length;
     photicBuf[w] = flashNow;
     wTot++;
   }
@@ -743,12 +1063,109 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
   }
   function annot(text) { annots.push({ w: wTot, text }); if (annots.length > 80) annots.shift(); }
 
+  function fmtClock(sec) {
+    const m = Math.floor(sec / 60), s = Math.floor(sec % 60);
+    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  }
+  function renderMarkers() {
+    const list = document.getElementById('markerList');
+    if (!list) return;
+    list.textContent = '';
+    if (!markerLog.length) {
+      const p = document.createElement('p');
+      p.className = 'imp-summary';
+      p.textContent = 'Henüz işaret yok. Aktivasyon, nöbet veya teknik olayları işaretleyin.';
+      list.appendChild(p);
+      return;
+    }
+    for (let i = markerLog.length - 1; i >= 0; i--) {
+      const m = markerLog[i];
+      const row = document.createElement('div');
+      row.className = 'marker-row';
+      const time = document.createElement('span');
+      time.className = 'marker-time';
+      time.textContent = fmtClock(m.time);
+      const text = document.createElement('span');
+      text.textContent = m.text;
+      const kind = document.createElement('span');
+      kind.className = 'marker-kind ' + m.kind;
+      kind.textContent = m.kind === 'seizure' ? 'nöbet' : m.kind === 'quality' ? 'kalite' : m.kind === 'activation' ? 'aktivasyon' : m.kind === 'scenario' ? 'senaryo' : 'not';
+      row.appendChild(time); row.appendChild(text); row.appendChild(kind);
+      list.appendChild(row);
+    }
+  }
+  function mark(text, kind = 'note') {
+    annot(text);
+    markerLog.push({ time: t, text, kind });
+    if (markerLog.length > 40) markerLog.shift();
+    renderMarkers();
+  }
+
+  function checkImpedance() {
+    imp = NAMES.map(() => +(1 + Math.random() * 8).toFixed(1));
+    if (Math.random() < 0.6) {
+      const bad = NAMES[Math.floor(Math.random() * NAMES.length)];
+      imp[IDX[bad]] = +(11 + Math.random() * 14).toFixed(1);
+    }
+    for (let i = 0; i < NAMES.length; i++) impNoise[i] = imp[i] > 10 ? 1 : 0;
+    renderImp();
+    const worst = Math.max(...imp);
+    mark(`Empedans kontrolü · en yüksek ${worst.toFixed(1).replace('.', ',')} kΩ`, 'quality');
+  }
+  function renderImp() {
+    const grid = document.getElementById('impGrid');
+    const summary = document.getElementById('impSummary');
+    if (!grid || !imp) return;
+    grid.textContent = '';
+    let bad = 0, warn = 0;
+    NAMES.forEach((n, i) => {
+      const v = imp[i];
+      const cell = document.createElement('div');
+      cell.className = 'imp-cell ' + (v > 10 ? 'bad' : v > 5 ? 'warn' : 'ok');
+      const name = document.createElement('b');
+      name.textContent = n;
+      const val = document.createElement('span');
+      val.textContent = v.toFixed(1).replace('.', ',') + ' kΩ';
+      cell.appendChild(name); cell.appendChild(val);
+      grid.appendChild(cell);
+      if (v > 10) bad++; else if (v > 5) warn++;
+    });
+    if (summary) {
+      summary.textContent = bad
+        ? `${bad} elektrot 10 kΩ üzerinde: ${NAMES.filter((n, i) => imp[i] > 10).join(', ')}. Bu elektrotları yeniden hazırlayın.`
+        : warn ? `${warn} elektrot 5–10 kΩ aralığında; izlemeye devam edin.`
+        : 'Tüm empedanslar 5 kΩ altında; kayıt için uygun.';
+    }
+  }
+  function setAge(years, quiet) {
+    ageYears = clamp(+years || 0, 0, 90);
+    MAT = maturationFor(ageYears);
+    buildBands();
+    const range = document.getElementById('age');
+    if (range) range.value = String(Math.round(ageYears));
+    const out = document.getElementById('ageOut');
+    if (out) out.textContent = ageText(ageYears);
+    const note = document.getElementById('matNote');
+    if (note) note.textContent = MAT.note;
+    if (!quiet) annot(`Yaş ${ageText(ageYears)} · PDR ${MAT.pdr.toFixed(1).replace('.', ',')} Hz`);
+    if (!quiet) draw();
+  }
+  function setMontage(key) {
+    if (!MONTAGES[key]) return;
+    montageKey = key;
+    CH = MONTAGES[key].build();
+    annot('Montaj: ' + MONTAGES[key].name);
+    drawHeadMontage();
+    resize();
+    draw();
+  }
+
   function startSeizure(auto) {
     const prof = PATIENTS[S.patient];
     if (!prof || !prof.seizure) { annot('Seçili profilde nöbet modeli yok'); return; }
     if (sez && sez.on) return;
     sez = { ...prof.seizure, on: true, t0: t, w0: wTot };
-    annot('Nöbet başladı: ' + prof.seizure.label);
+    mark('Nöbet başladı: ' + prof.seizure.label, 'seizure');
     const bs = document.getElementById('bSeizure'); if (bs) bs.setAttribute('aria-pressed', 'true');
     if (auto) { annot('Aktivasyonla tetiklendi'); nextAutoSez = t + 25; }
   }
@@ -768,12 +1185,18 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
     return topPad + c * chH + CH[c].chain * chH * 0.35 + chH / 2;
   }
   function photicY() { return rowY(CH.length - 1) + chH * 1.3; }
+  function chVal(c, idx) {
+    if (c.ref === 'avg') return bufE[c.a][idx] - bufAvg[idx];
+    if (c.ref === 'cz') return bufE[c.a][idx] - bufE[IDX.Cz][idx];
+    return bufE[c.a][idx] - bufE[c.b][idx];
+  }
   function resize() {
     const box = cv.parentElement.getBoundingClientRect();
     W = Math.max(280, box.width);
     const narrow = W < 640;
-    labelW = narrow ? 58 : 76;
-    chH = narrow ? 24 : 30;
+    const many = CH.length > 18;
+    labelW = narrow ? 58 : 84;
+    chH = narrow ? (many ? 20 : 24) : (many ? 24 : 30);
     basePage = narrow ? 5 : 10;
     H = photicY() + chH / 2 + botPad;
     dpr = window.devicePixelRatio || 1;
@@ -832,10 +1255,23 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
     const gap = Math.round(FS * 0.08 * 30 / S.speed) + 2;
     const pageStart = wTot - p;
     const lim = chH * 2.4;
+    const calOn = cal && t - cal.t0 < cal.dur;
+    const calW0 = cal ? Math.round(cal.t0 * FS) : 0;
+    if (calOn) {
+      ctx.fillStyle = col.accent;
+      ctx.font = `600 11px ${col['font-mono']}`;
+      ctx.textAlign = 'left';
+      ctx.fillText('BİYOKALİBRASYON · 50 µV · 1 Hz', x0 + 8, 20);
+    } else if (postT > t) {
+      ctx.fillStyle = col.mark;
+      ctx.font = `600 11px ${col['font-mono']}`;
+      ctx.textAlign = 'left';
+      ctx.fillText('POSTİKTAL YAVAŞLAMA', x0 + 8, 20);
+    }
     ctx.lineWidth = 1.15;
     ctx.lineJoin = 'round';
     for (let c = 0; c < CH.length; c++) {
-      const y0 = rowY(c), b = buf[c];
+      const y0 = rowY(c);
       ctx.strokeStyle = CH[c].side === 0 ? col.left : CH[c].side === 1 ? col.right : col.ink;
       ctx.beginPath();
       let pen = false;
@@ -843,7 +1279,9 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
         if (j >= p && j < p + gap) { pen = false; continue; }
         const idx = j < p ? pageStart + j : pageStart - vis + j;
         if (idx < 0) { pen = false; continue; }
-        const v = b[idx % BUF];
+        const v = (calOn && idx >= calW0)
+          ? ((idx - calW0) % FS < FS / 2 ? 50 : -50)
+          : chVal(CH[c], idx % BUF);
         // negative up: a positive voltage goes down on the screen
         const y = y0 + clamp(v * kV, -lim, lim);
         const x = x0 + j / vis * plotW;
@@ -913,8 +1351,9 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
     ctx.fillText(`${pageSec.toFixed(pageSec < 10 ? 1 : 0).replace('.', ',')} s / sayfa`, x0, calY);
 
     statusEl.innerHTML =
-      `<span>Durum: <b>${STATES[S.state].label}</b>${S.hv ? ' · <b>HV</b>' : ''}${ph.on ? ` · <b>Fotik ${PHOTIC_FREQS[ph.step]} Hz</b>` : ''}</span>` +
-      `<span>Profil: <b>${PATIENTS[S.patient].name}</b>${sez && sez.on ? ' · <b>Nöbet</b>' : ''}</span>` +
+      `<span>Durum: <b>${STATES[S.state].label}</b>${S.hv ? ' · <b>HV</b>' : ''}${ph.on ? ` · <b>Fotik ${PHOTIC_FREQS[ph.step]} Hz</b>` : ''}${cal ? ' · <b>Biyokalibrasyon</b>' : ''}${postT > t ? ' · <b>Postiktal</b>' : ''}</span>` +
+      `<span>Profil: <b>${PATIENTS[S.patient].name}</b> · Yaş <b>${ageText(ageYears)}</b> · ${MAT.label}${sez && sez.on ? ' · <b>Nöbet</b>' : ''}</span>` +
+      `<span>Montaj: <b>${MONTAGES[montageKey].name}</b> · PDR <b>${MAT.pdr.toFixed(1).replace('.', ',')} Hz</b>${imp ? ` · Empedans <b>${Math.max(...imp).toFixed(1).replace('.', ',')} kΩ</b>` : ''}</span>` +
       `<span><b>${S.sens}</b> µV/mm · <b>${S.speed}</b> mm/s · LFF <b>${String(S.lff).replace('.', ',')}</b> Hz · HFF <b>${S.hff}</b> Hz · Notch <b>${S.notch ? 'açık' : 'kapalı'}</b></span>` +
       `<span>Kayıt süresi <b>${fmtTime(t)}</b></span>`;
   }
@@ -973,8 +1412,13 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
   function setPhotic(on) {
     ph.on = on;
     $('tPhotic').setAttribute('aria-pressed', String(on));
-    if (on) { ph.step = 0; ph.t0 = t; ph.next = t; annot(`Fotik ${PHOTIC_FREQS[0]} Hz`); }
-    else annot('Fotik bitti');
+    if (on) { ph.step = 0; ph.t0 = t; ph.next = t; mark(`Fotik ${PHOTIC_FREQS[0]} Hz başladı`, 'activation'); }
+    else mark('Fotik bitti', 'activation');
+  }
+  function setHv(on) {
+    S.hv = !!on;
+    const b = document.getElementById('tHv');
+    if (b) b.setAttribute('aria-pressed', String(S.hv));
   }
   $('tPhotic').addEventListener('click', () => setPhotic(!ph.on));
   const popEls = ['T3', 'C4', 'O2', 'F3', 'P4', 'T5'];
@@ -1050,7 +1494,8 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
     };
     const swWave = tt => {
       const [a, b] = pr.sw; if (tt < a || tt > b) return 0;
-      const ph = ((tt - a) * 3) % 1, d = Math.min(ph, 1 - ph);
+      const swF = pr.swF || (p.seizure && p.seizure.f) || 3;
+      const ph = ((tt - a) * swF) % 1, d = Math.min(ph, 1 - ph);
       return -Math.exp(-Math.pow(d / 0.05, 2)) - 0.6 * Math.sin(Math.PI * clamp((ph - 0.08) / 0.92, 0, 1));
     };
     const flashWave = tt => {
@@ -1065,10 +1510,22 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
       const arr = new Float32Array(Np);
       const ph1 = rnd() * Math.PI * 2, ph2 = rnd() * Math.PI * 2;
       const alphaAmp = 4 + 5 * Math.abs(EL[b][1]);
+      const hypsEv = pr.hyps ? [0.5 + rnd() * 1.2, 1.7 + rnd() * 1.2, 2.8 + rnd() * 1.2, 3.8 + rnd() * 0.9] : [];
       for (let i = 0; i < Np; i++) {
         const tt = i / FSp;
         let v = alphaAmp * Math.sin(2 * Math.PI * 9.5 * tt + ph1)
           + 3 * Math.sin(2 * Math.PI * 4.3 * tt + ph2) + rn() * 1.5;
+        if (pr.hyps) {
+          v = 100 * Math.sin(2 * Math.PI * 1.5 * tt + ph1)
+            + 65 * Math.sin(2 * Math.PI * 2.9 * tt + ph2)
+            + 45 * Math.sin(2 * Math.PI * 0.8 * tt + ph1 * 0.5) + rn() * 18;
+          for (const ts of hypsEv) v -= 75 * Math.exp(-Math.pow((tt - ts) / 0.05, 2)) + 35 * Math.exp(-Math.pow((tt - ts - 0.18) / 0.09, 2));
+        }
+        if (pr.burst) {
+          const cyc = (tt + ci * 0.15) % 2.8;
+          const burst = cyc < 1.0 ? (cyc < 0.1 ? cyc / 0.1 : cyc > 0.8 ? (1 - cyc) / 0.2 : 1) : 0;
+          v = v * (0.06 + 0.94 * burst) + burst * (110 * Math.sin(2 * Math.PI * 2.2 * tt + ph1) + 50 * Math.sin(2 * Math.PI * 8 * tt + ph2));
+        }
         if (pr.spikes) for (const ts of pr.spikes) v += spikeWave(tt, ts, pr.poly) * p.spike.amp * (w[ia] - w[ib]);
         if (pr.sw) v += swWave(tt) * p.seizure.amp * (w[ia] - w[ib]);
         if (pr.photic) v += flashWave(tt) * 40 * wO[ib];
@@ -1119,9 +1576,12 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
     const sel = $('patient');
     if (sel && sel.value !== S.patient) sel.value = S.patient;
     sez = null;
-    nextAutoSez = t + 10;
+    postT = 0;
+    nextHyps = 0;
+    nextAutoSez = t + (S.patient === 'status' ? 0.6 : 10);
     nextSpike = prof.spike && prof.spike.rate > 0 ? t + 0.8 + Math.random() * 1.8 : Infinity;
-    annot('Profil: ' + prof.name);
+    if (prof.ageNum !== undefined) setAge(prof.ageNum, true);
+    mark('Profil: ' + prof.name, 'scenario');
     const bs = $('bSeizure'); if (bs) bs.setAttribute('aria-pressed', 'false');
     document.querySelectorAll('#cases .case').forEach(c => {
       const on = c.dataset.key === S.patient;
@@ -1150,6 +1610,36 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
     if (!prof.spike || !prof.spike.rate) { annot('Bu profilde interiktal diken yok'); return; }
     addEvent('spike', { w: prof.spike.w, amp: prof.spike.amp, poly: !!prof.spike.poly }, `${prof.focus.split(' ')[0]} diken`);
   });
+  $('age').addEventListener('change', e => { setAge(+e.target.value); });
+  $('montage').addEventListener('change', e => { setMontage(e.target.value); mark('Montaj: ' + MONTAGES[e.target.value].name, 'quality'); });
+  $('bCal').addEventListener('click', () => {
+    cal = { t0: t, dur: 8 };
+    mark('Biyokalibrasyon başladı · 50 µV · 1 Hz kare dalga', 'quality');
+    $('bCal').setAttribute('aria-pressed', 'true');
+    draw();
+  });
+  $('bImp').addEventListener('click', () => {
+    $('impCard').hidden = false;
+    $('bImp').setAttribute('aria-pressed', 'true');
+    checkImpedance();
+  });
+  $('bImpAgain').addEventListener('click', checkImpedance);
+  $('bMarker').addEventListener('click', () => {
+    const input = $('markerText');
+    const text = (input.value || '').trim() || 'Teknisyen işareti';
+    mark(text, 'note');
+    input.value = '';
+  });
+  $('markerText').addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); $('bMarker').click(); }
+  });
+  document.querySelectorAll('.qmark').forEach(b => {
+    b.addEventListener('click', () => {
+      const text = b.dataset.marker;
+      const kind = text.includes('Fotik') ? 'activation' : text.includes('Nöbet') ? 'seizure' : 'note';
+      mark(text, kind);
+    });
+  });
 
   const casesEl = $('cases');
   for (const [k, p] of Object.entries(PATIENTS)) {
@@ -1159,7 +1649,7 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
     card.dataset.key = k;
     card.innerHTML = `<h3>${p.name}<span class="tag">${p.tag}</span></h3>
       <dl>
-        <dt>Yaş / cinsiyet</dt><dd>${p.age} yaş · ${p.sex}</dd>
+        <dt>Yaş / cinsiyet</dt><dd>${p.age} · ${p.sex}</dd>
         <dt>Tanı</dt><dd>${p.dx}</dd>
         <dt>Odak</dt><dd>${p.focus}</dd>
         <dt>Aktivatör</dt><dd>${p.act}</dd>
@@ -1180,6 +1670,166 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
   matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => caseCanvases.forEach(c => drawPreview(c.cv, c.key)));
   new MutationObserver(() => caseCanvases.forEach(c => drawPreview(c.cv, c.key))).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
+  // ---------- Clinical scenarios ----------
+  const SCENARIOS = [
+    {
+      title: 'Derste dalan çocuk', patient: 'absans', age: 9, state: 'closed', montage: 'long', hv: true,
+      story: '9 yaşında kız; öğretmeni ders sırasında birkaç saniyelik dalma ve göz kırpma fark etmiş. Nöbet sonrası hemen eski haline dönüyor.',
+      expected: 'Yüksek amplitüdlü 3 Hz jeneralize diken-dalga deşarjı; hiperventilasyonla provoke olur.',
+      protocol: 'Göz kapatma, 3 dakika hiperventilasyon, fotik uyarım; deşarj sırasında hastayı izle ve işaretle.',
+    },
+    {
+      title: 'Deja vu ve otomatizm', patient: 'temporal', age: 34, state: 'closed', montage: 'long', seizure: true,
+      story: '34 yaşında erkek; mide bulantısı, deja vu ve ardından ağız şapırdatma tarifliyor. Nöbet sonrası birkaç dakika konfüzyon var.',
+      expected: 'Sağ temporal keskin dalgalar; fokal nöbette 5–7 Hz ritmik aktivite ve faz dönüşü.',
+      protocol: 'Uyku/uykusuzluk kaydı, uzun süreli video-EEG; nöbet başlangıcını zamanla.',
+    },
+    {
+      title: 'Uykuda yüz seyirmesi', patient: 'rolandik', age: 7, state: 'n2', montage: 'trans',
+      story: '7 yaşında erkek; gece uykusunda yüzün yarısında seyirme ve ağız kenarında çekilme. Nöbetler kısa ve gündüz normal.',
+      expected: 'Santrotemporal keskin dalgalar, uykuda belirgin; transvers montajda C4 çevresinde faz dönüşü.',
+      protocol: 'Uyku N2 kaydı; transvers ve boyuna montajı karşılaştır.',
+    },
+    {
+      title: 'Bebekte spazm kümeleri', patient: 'west', age: 0.5, state: 'drowsy', montage: 'avg',
+      story: '6 aylık erkek; sabah uyanırken başını öne eğip kollarını açtığı, 5–10 saniyelik kümeler halinde spazmlar. Gelişim geriliği var.',
+      expected: 'Hipsaritmi: kaotik yüksek amplitüdlü yavaş aktivite ve multifokal dikenler; spazm kümesinde elektrodekrement.',
+      protocol: 'Uyku kaydı, spazm anını işaretle; ortalama referans montajı ile yaygınlığı değerlendir.',
+    },
+    {
+      title: 'Sabah miyoklonileri', patient: 'jme', age: 16, state: 'open', montage: 'long',
+      story: '16 yaşında kız; sabahları elinden bardak düşürecek kadar ani sıçramalar. Uykusuzluk sonrası bir kez jeneralize nöbet öyküsü.',
+      expected: 'Jeneralize poli-diken patlamaları; uyanma ve uykusuzlukla artar.',
+      protocol: 'Sabah kaydı, 3 dakika hiperventilasyon, uykusuzluk öyküsü; fotik uyarım.',
+    },
+    {
+      title: 'Oyun konsolunda nöbet', patient: 'photosensitive', age: 12, state: 'closed', montage: 'long', photic: true,
+      story: '12 yaşında erkek; bilgisayar oyunu sırasında hızlı ışık değişimiyle baş dönmesi ve nöbet. Aile öyküsü yok.',
+      expected: 'Fotik sürüklenme ve oksipital dikenler; 14–20 Hz fotik uyarımda deşarj.',
+      protocol: 'Fotik protokol 1–30 Hz; göz açık/kapalı; deşarjı ve uyarım frekansını işaretle.',
+    },
+    {
+      title: 'Konfüzyonla gelen hasta', patient: 'status', age: 45, state: 'closed', montage: 'avg', seizure: true,
+      story: '45 yaşında kadın; iki gündür konuşması yavaş, dalgın ve tekrarlayıcı hareketler var. Acil serviste bilinç değişikliği nedeniyle EEG istendi.',
+      expected: 'Sürekli 2,5 Hz jeneralize diken-dalga / ritmik yavaş aktivite (nonkonvulsif status).',
+      protocol: 'Acil EEG; sürekli ritmik deşarjı işaretle, tedavi yanıtını izle.',
+    },
+    {
+      title: 'Ensefalopatide burst-süpresyon', patient: 'burst', age: 3, state: 'closed', montage: 'avg',
+      story: '3 yaşında erkek; kardiyopulmoner arrest sonrası hipoksik-iskemik ensefalopati. Uyanıklık azalmış, spontan hareket yok.',
+      expected: 'Burst-süpresyon: uzun baskılanma dönemleri arasında karışık frekanslı patlamalar.',
+      protocol: 'Ortalama referans montajı; baskılanma ve patlama sürelerini ölç, işaretle.',
+    },
+  ];
+  const scenarioList = $('scenarioList');
+  function loadScenario(s) {
+    setPatient(s.patient);
+    if (s.age !== undefined) setAge(s.age);
+    if (s.montage) { $('montage').value = s.montage; setMontage(s.montage); }
+    if (s.state) setState(s.state);
+    if (!!s.hv !== S.hv) setHv(!!s.hv);
+    if (!!s.photic !== ph.on) setPhotic(!!s.photic);
+    if (s.seizure) startSeizure(false);
+    mark('Senaryo yüklendi: ' + s.title, 'scenario');
+    $('screen').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  SCENARIOS.forEach(s => {
+    const card = document.createElement('article');
+    card.className = 'scenario';
+    card.innerHTML = `<h3>${s.title}<span class="tag">${PATIENTS[s.patient].tag}</span></h3>
+      <p class="story"><b>Öykü:</b> ${s.story}</p>
+      <p class="expected"><b>Beklenen:</b> ${s.expected}</p>
+      <p class="protocol"><b>Protokol:</b> ${s.protocol}</p>
+      <button class="use" type="button">Senaryoyu yükle</button>`;
+    card.querySelector('button').addEventListener('click', () => loadScenario(s));
+    scenarioList.appendChild(card);
+  });
+
+  // ---------- Student practical exam ----------
+  const PATTERN_OPTIONS = ['Normal zemin aktivitesi', '3 Hz jeneralize diken-dalga', 'Fokal diken/keskin dalga', 'Hipsaritmi', 'Burst-süpresyon', 'Sürekli ritmik diken-dalga (status)'];
+  const DX_OPTIONS = ['Normal', 'Absans epilepsisi', 'Temporal fokal epilepsi', 'Rolandik epilepsi', 'West sendromu', 'Ensefalopati (burst-süpresyon)', 'Nonkonvulsif status'];
+  const EXAM_CASES = [
+    {
+      key: 'absans', vignette: '9 yaşında kız. Derste birkaç saniyelik dalma, göz kırpma ve hemen düzelme. Hiperventilasyonla aynı ataklar provake ediliyor.',
+      pattern: '3 Hz jeneralize diken-dalga', dx: 'Absans epilepsisi', swF: 3,
+      explain: '3 Hz jeneralize diken-dalga deşarjı absans epilepsisinin tipik bulgusudur; hiperventilasyon provoke eder.',
+    },
+    {
+      key: 'temporal', vignette: '34 yaşında erkek. Epigastrik yükselme, deja vu ve ağız şapırdatma; nöbet sonrası konfüzyon. Sağ temporal bölgede fokal deşarj düşünülüyor.',
+      pattern: 'Fokal diken/keskin dalga', dx: 'Temporal fokal epilepsi',
+      explain: 'Fokal temporal keskin dalgalar ve nöbette ritmik aktivite; bipolar montajda odak çevresinde faz dönüşü görülür.',
+    },
+    {
+      key: 'west', vignette: '6 aylık erkek. Uyanırken baş öne eğilme ve kollarda açılma şeklinde 5–10 saniyelik spazm kümeleri; gelişim geriliği.',
+      pattern: 'Hipsaritmi', dx: 'West sendromu',
+      explain: 'Hipsaritmi kaotik, yüksek amplitüdlü yavaş aktivite ve multifokal dikenlerle karakterizedir; infantil spazmlarla birlikte West sendromu.',
+    },
+    {
+      key: 'burst', vignette: '3 yaşında erkek. Kardiyopulmoner arrest sonrası ağır ensefalopati; spontan hareket yok, uyanıklık azalmış.',
+      pattern: 'Burst-süpresyon', dx: 'Ensefalopati (burst-süpresyon)',
+      explain: 'Burst-süpresyon, baskılanma dönemleri arasında karışık frekanslı patlamalarla seyreder; ağır kortikal disfonksiyonu gösterir.',
+    },
+    {
+      key: 'status', vignette: '45 yaşında kadın. İki gündür konfüzyon, yavaş konuşma ve tekrarlayıcı hareketler. Acil EEG istendi.',
+      pattern: 'Sürekli ritmik diken-dalga (status)', dx: 'Nonkonvulsif status',
+      explain: 'Sürekli 2,5 Hz diken-dalga / ritmik yavaş aktivite nonkonvulsif status epileptikusun tipik paternidir; acil tedavi gerektirir.',
+    },
+    {
+      key: 'rolandik', vignette: '7 yaşında erkek. Gece uykusunda yüzün yarısında seyirme ve ağız kenarında çekilme; gündüz nöbet yok.',
+      pattern: 'Fokal diken/keskin dalga', dx: 'Rolandik epilepsi',
+      explain: 'Santrotemporal keskin dalgalar uykuda artar; benign rolandik epilepsinin tipik bulgusudur.',
+    },
+  ];
+  let examCase = null, examStats = { right: 0, total: 0 }, examAnswered = false;
+  const examCv = $('examCv'), examForm = $('examForm'), examVignette = $('examVignette');
+  const examFeedback = $('examFeedback'), examScoreEl = $('examScore');
+  function optHtml(name, options) {
+    return options.map(o => `<label class="exam-opt"><input type="radio" name="${name}" value="${o}">${o}</label>`).join('');
+  }
+  function updateExamScore() {
+    examScoreEl.textContent = `Puan: ${examStats.right} / ${examStats.total}`;
+  }
+  function newExamCase() {
+    let pick = examCase;
+    while (EXAM_CASES.length > 1 && pick === examCase) pick = EXAM_CASES[Math.floor(Math.random() * EXAM_CASES.length)];
+    examCase = pick;
+    examAnswered = false;
+    examVignette.textContent = examCase.vignette;
+    examForm.innerHTML = `
+      <fieldset class="exam-q"><legend>1. Trasede baskın patern?</legend>${optHtml('ex1', PATTERN_OPTIONS)}</fieldset>
+      <fieldset class="exam-q"><legend>2. En olası tanı / klinik durum?</legend>${optHtml('ex2', DX_OPTIONS)}</fieldset>`;
+    examFeedback.textContent = '';
+    examFeedback.className = '';
+    drawPreview(examCv, examCase.key);
+    updateExamScore();
+  }
+  function gradeExam() {
+    if (!examCase || examAnswered) return;
+    const a1 = examForm.querySelector('input[name="ex1"]:checked');
+    const a2 = examForm.querySelector('input[name="ex2"]:checked');
+    if (!a1 || !a2) {
+      examFeedback.className = 'feedback bad';
+      examFeedback.textContent = 'Her iki soruyu da yanıtlayın.';
+      return;
+    }
+    examAnswered = true;
+    const ok1 = a1.value === examCase.pattern, ok2 = a2.value === examCase.dx;
+    examStats.total += 2;
+    examStats.right += (ok1 ? 1 : 0) + (ok2 ? 1 : 0);
+    updateExamScore();
+    examFeedback.className = 'feedback ' + (ok1 && ok2 ? 'good' : 'bad');
+    examFeedback.innerHTML = `<b>${ok1 && ok2 ? 'Doğru' : 'Eksik/yanlış'}.</b> Doğru patern: <b>${examCase.pattern}</b>. Doğru tanı: <b>${examCase.dx}</b>.<br>${examCase.explain}`;
+  }
+  examForm.addEventListener('submit', e => { e.preventDefault(); gradeExam(); });
+  $('bNewCase').addEventListener('click', newExamCase);
+  $('bPrint').addEventListener('click', () => {
+    document.getElementById('examTemplate').open = true;
+    window.print();
+  });
+  newExamCase();
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (examCase) drawPreview(examCv, examCase.key); });
+  new MutationObserver(() => { if (examCase) drawPreview(examCv, examCase.key); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
   // ---------- Head map ----------
   const svg = $('head');
   const NS = 'http://www.w3.org/2000/svg';
@@ -1189,10 +1839,19 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
   mk('ellipse', { cx: -1.03, cy: 0, rx: 0.06, ry: 0.16, fill: 'none', stroke: st('muted'), 'stroke-width': 0.02 });
   mk('ellipse', { cx: 1.03, cy: 0, rx: 0.06, ry: 0.16, fill: 'none', stroke: st('muted'), 'stroke-width': 0.02 });
   mk('circle', { cx: 0, cy: 0, r: 1, fill: st('paper'), stroke: st('muted'), 'stroke-width': 0.02 });
-  CHAINS.forEach(c => {
-    const pts = c.list.map(n => EL[n].join(',')).join(' ');
-    mk('polyline', { points: pts, fill: 'none', stroke: st(c.side === 0 ? 'left' : c.side === 1 ? 'right' : 'ink'), 'stroke-width': 0.022, 'stroke-opacity': 0.55 });
-  });
+  const montageGroup = mk('g', {});
+  function drawHeadMontage() {
+    montageGroup.innerHTML = '';
+    const chains = MONTAGES[montageKey].chains;
+    chains.forEach(c => {
+      if (!c.list || c.list.length < 2) return;
+      const xs = c.list.map(n => EL[n][0]);
+      const avg = xs.reduce((a, b) => a + b, 0) / xs.length;
+      const side = c.side !== undefined ? c.side : avg < -0.12 ? 0 : avg > 0.12 ? 1 : 2;
+      const pts = c.list.map(n => EL[n].join(',')).join(' ');
+      mk('polyline', { points: pts, fill: 'none', stroke: st(side === 0 ? 'left' : side === 1 ? 'right' : 'ink'), 'stroke-width': 0.022, 'stroke-opacity': 0.55 }, montageGroup);
+    });
+  }
   NAMES.forEach(n => {
     const [x, y] = EL[n];
     mk('circle', { cx: x, cy: y, r: 0.055, fill: st('surface'), stroke: st('ink'), 'stroke-width': 0.018, 'data-el': n });
@@ -1203,6 +1862,9 @@ kbd { font-family: var(--font-mono); font-size: 12px; background: var(--paper); 
   lbl(0, -1.18, 'burun');
   lbl(-1.03, 0.27, 'sol');
   lbl(1.03, 0.27, 'sağ');
+  drawHeadMontage();
+  renderMarkers();
+  setAge(30, true);
 
   new ResizeObserver(resize).observe(cv.parentElement);
   resize();
